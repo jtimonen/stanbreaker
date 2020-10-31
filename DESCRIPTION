@@ -1,0 +1,24 @@
+Package: stanbreaker
+Title: Calling cmdstan with breakpoints.
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Juho",
+           family = "Timonen",
+           role = c("aut", "cre"),
+           email = "juho.timonen@iki.fi",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Call cmdstan from R, with the possibility to break after a small
+    number of HMC adaptation iterations, and initializing new chains based on 
+    the short adaptation period.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat
+Depends:
+    R (>= 3.4.0),
+    methods
+Imports:
+    cmdstanr (>= 0.1.3)
