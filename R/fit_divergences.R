@@ -1,3 +1,9 @@
+#' Analyze a cmdstanr fit to figure out where the divergences are coming from
+#'
+#' @export
+#' @param fit A stan fit to analyze
+#'
+#' @return Another cmdstanr fit informing you about your divergences
 fit_divergences <- function(fit) {
   if(!setequal(class(fit), c("CmdStanMCMC", "CmdStanFit", "R6"))) {
     stop("Argument to fitfit should be an MCMC fit object from cmdstanr")
