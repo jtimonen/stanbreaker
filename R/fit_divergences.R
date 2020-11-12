@@ -2,7 +2,6 @@
 #'
 #' @export
 #' @param fit A stan fit to analyze
-#'
 #' @return Another \code{cmdstanr} fit informing you about your divergences
 fit_divergences <- function(fit) {
   if (!setequal(class(fit), c("CmdStanMCMC", "CmdStanFit", "R6"))) {

@@ -6,7 +6,7 @@
 \alias{stanbreaker}
 \title{The 'stanbreaker' package.}
 \description{
-
+Write description.
 }
 \references{
 \enumerate{

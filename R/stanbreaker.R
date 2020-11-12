@@ -1,6 +1,6 @@
 #' The 'stanbreaker' package.
 #'
-#' @description
+#' @description Write description.
 #'
 #' @author Juho Timonen (first.last at iki.fi) and Ben Bales
 #' @keywords Stan, adaptation, Hamiltonian Monte Carlo
@@ -9,6 +9,10 @@
 #' @name stanbreaker-package
 #' @aliases stanbreaker
 #' @import methods
+#' @import dplyr
+#' @import ggplot2
+#' @import posterior
+#' @import stats
 #'
 #' @references
 #' \enumerate{

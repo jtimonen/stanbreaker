@@ -3,4 +3,8 @@
 export(create_model)
 export(fit_divergences)
 export(write_model)
+import(dplyr)
+import(ggplot2)
 import(methods)
+import(posterior)
+import(stats)

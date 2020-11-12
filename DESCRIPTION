@@ -1,5 +1,5 @@
 Package: stanbreaker
-Title: Fast way to try out different things in Stan.
+Title: Fast way to try out different things in Stan
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Juho",
@@ -28,4 +28,5 @@ Imports:
     cmdstanr (>= 0.1.3),
     rstan (>= 2.21.2),
     ggplot2 (>= 3.3.2),
-    dplyr (>= 1.0.2)
+    dplyr (>= 1.0.2),
+    posterior(>= 0.1.2)
