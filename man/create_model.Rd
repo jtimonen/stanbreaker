@@ -9,7 +9,7 @@ create_model(stan_file, ...)
 \arguments{
 \item{stan_file}{path to a \code{.stan} file that describes the model}
 
-\item{...}{compilation options}
+\item{...}{additional arguments to \code{$compile} in \code{cmdstanr}}
 }
 \value{
 a CmdStanModel object

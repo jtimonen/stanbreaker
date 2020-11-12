@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' @author Juho Timonen (first.last at iki.fi)
+#' @author Juho Timonen (first.last at iki.fi) and Ben Bales
 #' @keywords Stan, adaptation, Hamiltonian Monte Carlo
 #'
 #' @docType package

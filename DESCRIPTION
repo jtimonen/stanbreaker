@@ -1,12 +1,16 @@
 Package: stanbreaker
-Title: Calling cmdstan with breakpoints.
+Title: Fast way to try out different things in Stan.
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Juho",
+    c(person(given = "Juho",
            family = "Timonen",
            role = c("aut", "cre"),
            email = "juho.timonen@iki.fi",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person(given = "Ben",
+           family = "Bales",
+           email = "something",
+           role = c("aut")))
 Description: Call cmdstan from R, with the possibility to break after a small
     number of HMC adaptation iterations, and initializing new chains based on 
     the short adaptation period.
@@ -21,4 +25,7 @@ Depends:
     R (>= 3.4.0),
     methods
 Imports:
-    cmdstanr (>= 0.1.3)
+    cmdstanr (>= 0.1.3),
+    rstan (>= 2.21.2),
+    ggplot2 (>= 3.3.2),
+    dplyr (>= 1.0.2)

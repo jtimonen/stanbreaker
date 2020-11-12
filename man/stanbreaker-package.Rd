@@ -16,7 +16,7 @@ Software 76(1).
 }
 }
 \author{
-Juho Timonen (first.last at iki.fi)
+Juho Timonen (first.last at iki.fi) and Ben Bales
 }
 \keyword{Carlo}
 \keyword{Hamiltonian}
