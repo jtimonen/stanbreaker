@@ -7,7 +7,7 @@
 fit_divergences(fit)
 }
 \arguments{
-\item{fit}{A stan fit to analyze}
+\item{fit}{A cmdstanr fit to analyze}
 }
 \value{
 Another \code{cmdstanr} fit informing you about your divergences
