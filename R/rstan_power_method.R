@@ -74,8 +74,8 @@ rstan_power_method <- function(fit, udraws, L = NULL, max_iterations = 200, tol 
 
     f = function(v) {
       v = v / sqrt(sum(v^2))
-      (grad_log_prob(fit, u + dx * v) -
-        grad_log_prob(fit, u - dx * v)) / (2.0 * dx)
+      (grad_log_prob(fit, u + dx * L %*% v) -
+        grad_log_prob(fit, u - dx * L %*% v)) / (2.0 * dx)
     }
 
     Av = f(v)
