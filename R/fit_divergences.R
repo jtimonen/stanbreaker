@@ -1,7 +1,7 @@
 #' Analyze a cmdstanr fit to figure out where the divergences are coming from
 #'
 #' @export
-#' @param fit A stan fit to analyze
+#' @param fit A cmdstanr fit to analyze
 #' @return Another \code{cmdstanr} fit informing you about your divergences
 fit_divergences <- function(fit) {
   if (!setequal(class(fit), c("CmdStanMCMC", "CmdStanFit", "R6"))) {

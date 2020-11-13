@@ -2,6 +2,9 @@
 
 export(create_model)
 export(fit_divergences)
+export(rstan_make_fit)
+export(rstan_hessian)
+export(cmdstan_unconstrained_draws)
 export(write_model)
 import(dplyr)
 import(ggplot2)

@@ -9,11 +9,11 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID")),
     person(given = "Ben",
            family = "Bales",
-           email = "something",
+           email = "bbbales2@gmail.com",
            role = c("aut")))
 Description: Call cmdstan from R, with the possibility to break after a small
     number of HMC adaptation iterations, and initializing new chains based on 
-    the short adaptation period.
+    the short adaptation period. And all sorts of other exciting things!
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
