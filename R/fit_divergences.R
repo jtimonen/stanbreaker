@@ -10,18 +10,20 @@ fit_divergences <- function(fit) {
     stop(msg)
   }
 
-  # TODO: explain what is done here
-  # TODO: where are pull and as_draws_df and etc. coming from?
+  # Get divergent transitions as vector of 0s and 1s
   divs <- fit$sampler_diagnostics() %>%
-    as_draws_df() %>%
-    pull(divergent__)
+    posterior::as_draws_df() %>%
+    dplyr(divergent__)
 
+  # Get matrix of parameters
   draws <- fit$draws() %>%
-    as_draws_matrix() %>%
-    subset_draws(fit$metadata()$stan_variables)
+    posterior::as_draws_matrix() %>%
+    posterior::subset_draws(fit$metadata()$stan_variables)
 
+  # Ignore lp__ (which will be the first column)
   draws <- draws[, 2:ncol(draws)]
 
+  # Whiten inputs
   means <- apply(draws, 2, mean)
   sds <- apply(draws, 2, sd)
 
@@ -29,20 +31,18 @@ fit_divergences <- function(fit) {
     (draws[i, ] - means) / sds
   }) %>% do.call(rbind, .)
 
-  y <- divs
-
   # Create model
-  # TODO: get rid of metastan here
-  filename <- system.file("extdata", "lr.stan", package = "metastan")
+  filename <- system.file("extdata", "lr.stan", package = "stanbreaker")
   mod_lr <- cmdstanr::cmdstan_model(filename)
 
   # Fit model
   fit_lr <- mod_lr$sample(
     data = list(
       N = nrow(X), M = ncol(X),
-      X = X, y = y,
+      X = X, y = divs,
       prior = 0.05
     ),
+    # TODO do the parallel mc cores thing here (system defaults)
     parallel_chains = 4
   )
 
