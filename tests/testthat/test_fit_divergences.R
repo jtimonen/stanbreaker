@@ -16,8 +16,7 @@ test_that("fit_divergences works and returns a CmdStanFit", {
   expect_true("CmdStanFit" %in% class(div_fit))
 })
 
-# - We could write a new test here that does a different thing with schools_fit
-# - We don't need to recompile lr.stan or model_8schools.stan when running them
+# We could write a new test here that does a different thing with schools_fit
 #
 # test_that("fit_divergences works and returns a CmdStanFit", {
 #  div_fit <- fit_divergences(schools_fit)
