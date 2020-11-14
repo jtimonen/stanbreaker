@@ -10,15 +10,15 @@ cmdstan_unconstrained_draws <- function(fit) {
     stop(msg)
   }
 
-  latent_dynamics_files = fit$latent_dynamics_files()
+  latent_dynamics_files <- fit$latent_dynamics_files()
 
-  latent_dynamics = cmdstanr::read_cmdstan_csv(latent_dynamics_files)
+  latent_dynamics <- cmdstanr::read_cmdstan_csv(latent_dynamics_files)
 
-  draws_df = latent_dynamics$post_warmup_draws %>%
+  draws_df <- latent_dynamics$post_warmup_draws %>%
     posterior::as_draws_df()
 
   # Dimension of unconstrained space
-  N = (ncol(draws_df) - 4) / 3
+  N <- (ncol(draws_df) - 4) / 3
 
   return(draws_df %>% select(2:(N + 1), `.chain`, `.iteration`, `.draw`))
 }

@@ -16,20 +16,21 @@ rstan_power_method(fit, udraws, L = NULL, max_iterations = 200, tol = 1e-05)
 eigenvalue/eigenvector pairs
 }
 \description{
-If udraws is a vector, the output is the eigenvalue/
+\itemize{
+\item If \code{udraws} is a vector, the output is the eigenvalue/
 eigenvector pair computed at the point in parameter
-space corresponding to udraws
-}
-\details{
-If udraws is a matrix, each row is interpreted as a place
+space corresponding to \code{udraws}
+
+\item If \code{udraws} is a matrix, each row is interpreted as a place
 to compute an eigenvalue/eigenvector pair and the output
 is a list of eigenvalue/eigenvector pairs
 
-L is an optional preconditioner matrix. If this is supplied
-compute the eigenvalue/eigenvector pairs of L^T * H * L
+\item \code{L} is an optional preconditioner matrix. If this is supplied
+compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}
 
-max_iterations is the maximum number of power method iterations
+\item \code{max_iterations} is the maximum number of power method iterations
 to use on any output
 
-tol is the relative tolerance check done on the eigenvalue
+\item \code{tol} is the relative tolerance check done on the eigenvalue
+}
 }

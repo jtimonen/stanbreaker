@@ -27,7 +27,7 @@ fit_divergences <- function(fit) {
   means <- apply(draws, 2, mean)
   sds <- apply(draws, 2, sd)
 
-  X <- lapply(1:nrow(draws), function(i) {
+  X <- lapply(seq_len(nrow(draws)), function(i) {
     (draws[i, ] - means) / sds
   }) %>% do.call(rbind, .)
 

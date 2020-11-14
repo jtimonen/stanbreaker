@@ -8,7 +8,7 @@ object run with save_latent_dynamics = TRUE}
 cmdstan_momentum_draws(fit)
 }
 \arguments{
-\item{fit}{A cmdstan fit object run with save_latent_dynamics = TRUE}
+\item{fit}{A cmdstan fit object run with \code{save_latent_dynamics = TRUE}}
 }
 \value{
 A posterior matrix of momentum draws
