@@ -10,17 +10,14 @@
 #' \item If \code{udraws} is a matrix, each row is interpreted as a place
 #' to compute an eigenvalue/eigenvector pair and the output
 #' is a list of eigenvalue/eigenvector pairs
-#'
-#' \item \code{L} is an optional preconditioner matrix. If this is supplied
-#' compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}
-#'
-#' \item \code{max_iterations} is the maximum number of power method iterations
-#' to use on any output
-#'
-#' \item \code{tol} is the relative tolerance check done on the eigenvalue
 #' }
 #' @export
 #' @param fit An rstan stanfit
+#' @param L is an optional preconditioner matrix. If this is supplied
+#' compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}
+#' @param max_iterations is the maximum number of power method iterations
+#' to use on any output
+#' @param tol is the relative tolerance check done on the eigenvalue
 #' @param udraws Place(s) to compute Hessian(s) at
 #' @return eigenvalue/eigenvector pairs
 rstan_power_method <- function(fit, udraws, L = NULL,
@@ -53,8 +50,10 @@ rstan_power_method <- function(fit, udraws, L = NULL,
     L <- diag(N)
   } else {
     if (N != nrow(L) || N != ncol(L)) {
-      msg <- paste("L (if supplied) must be a square matrix of size", N,
-                   "by", N)
+      msg <- paste(
+        "L (if supplied) must be a square matrix of size", N,
+        "by", N
+      )
       stop(msg)
     }
   }

@@ -45,8 +45,8 @@ rstan_hessian <- function(fit, udraws) {
       xm <- udraws[m, ]
       xm[n] <- xm[n] - dx
 
-      H[, n] <- (grad_log_prob(fit, as.vector(xp)) -
-        grad_log_prob(fit, as.vector(xm))) / (2.0 * dx)
+      H[, n] <- (rstan::grad_log_prob(fit, as.vector(xp)) -
+        rstan::grad_log_prob(fit, as.vector(xm))) / (2.0 * dx)
     }
 
     out[[m]] <- 0.5 * (H + t(H))
