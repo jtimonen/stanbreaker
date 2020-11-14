@@ -1,10 +1,10 @@
-#' Get matrix of unconstrained draws from a cmdstanr fit
+#' Get momentum draws from a cmdstanr fit
 #' object run with save_latent_dynamics = TRUE
 #'
 #' @export
 #' @param fit A cmdstan fit object run with save_latent_dynamics = TRUE
-#' @return A posterior matrix of unconstrained draws
-cmdstan_unconstrained_draws <- function(fit) {
+#' @return A posterior matrix of momentum draws
+cmdstan_momentum_draws <- function(fit) {
   if (!setequal(class(fit), c("CmdStanMCMC", "CmdStanFit", "R6"))) {
     msg <- "fit argument should be an MCMC fit object from cmdstanr"
     stop(msg)
@@ -20,5 +20,5 @@ cmdstan_unconstrained_draws <- function(fit) {
   # Dimension of unconstrained space
   N = (ncol(draws_df) - 4) / 3
 
-  return(draws_df %>% select(2:(N + 1), `.chain`, `.iteration`, `.draw`))
+  return(draws_df %>% select((N + 2):(2 * N + 1), `.chain`, `.iteration`, `.draw`))
 }
