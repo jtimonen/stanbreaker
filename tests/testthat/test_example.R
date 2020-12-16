@@ -7,7 +7,22 @@ context("Analysing divergences")
 filename <- system.file("extdata", "model_8schools.stan",
   package = "stanbreaker"
 )
-model <- cmdstanr::cmdstan_model(filename)
+
+# Build model
+tryCatch(
+  {
+    model <- cmdstanr::cmdstan_model(filename)
+  },
+  error = function(e) {
+    cat(
+      " Unable to build model. Probably a problem with cmdstanr",
+      "installation. Try to run this code on its own to see the error.\n"
+    )
+    print(e)
+  }
+)
+
+# Fit model
 schools_fit <- model$sample(data = stanbreaker::data_8schools)
 
 # Example test
