@@ -12,7 +12,7 @@ trying out different types of adaptation.
 ## Installation
 
 ``` r
-devtools::install_github("jtimonen/stanbreaker")
+devtools::install_github("jtimonen/stanbreaker", ref = "main")
 ```
 
 ## Example
