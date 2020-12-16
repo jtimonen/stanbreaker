@@ -3,7 +3,7 @@
 #' @description Write description.
 #'
 #' @author Juho Timonen (first.last at iki.fi) and Ben Bales
-#' @keywords Stan, adaptation, Hamiltonian Monte Carlo
+#' @keywords Stan, adaptation, Hamiltonian Monte Carlo, development tools
 #'
 #' @docType package
 #' @name stanbreaker-package
@@ -12,7 +12,6 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import posterior
-#' @import stats
 #'
 #' @references
 #' \enumerate{

@@ -15,14 +15,14 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
     stop(msg)
   }
 
-  as_vector = function(name, x) {
-    if(posterior::is_draws_array(x) ||
-       posterior::is_draws_matrix(x) ||
-       posterior::is_draws_list(x) ||
-       posterior::is_draws_df(x)) {
-      x = posterior::as_draws_matrix(x)
+  as_vector <- function(name, x) {
+    if (posterior::is_draws_array(x) ||
+      posterior::is_draws_matrix(x) ||
+      posterior::is_draws_list(x) ||
+      posterior::is_draws_df(x)) {
+      x <- posterior::as_draws_matrix(x)
 
-      if(nrow(x) > 1) {
+      if (nrow(x) > 1) {
         msg <- paste("if argument", name, "is a posterior type, it can only have draw (and 1 chain)")
         stop(msg)
       } else {
@@ -30,11 +30,11 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
       }
     }
 
-    if(is.list(x)) {
+    if (is.list(x)) {
       msg <- paste("argment", name, "must be a vector not a list")
       stop(msg)
     }
-    if(is.vector(x)) {
+    if (is.vector(x)) {
       return(x)
     }
 
@@ -42,95 +42,99 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
     stop(msg)
   }
 
-  column_names = colnames(udraws)
+  column_names <- colnames(udraws)
 
-  udraws = as_vector("udraws", udraws)
-  mdraws = as_vector("mdraws", mdraws)
+  udraws <- as_vector("udraws", udraws)
+  mdraws <- as_vector("mdraws", mdraws)
 
-  N = length(udraws)
+  N <- length(udraws)
 
-  if(is.null(column_names)) {
-    column_names = paste0("V", 1:N)
+  if (is.null(column_names)) {
+    column_names <- paste0("V", 1:N)
   } else {
-    column_names = column_names[1:N]
+    column_names <- column_names[1:N]
   }
 
-  if(N != length(mdraws)) {
+  if (N != length(mdraws)) {
     msg <- "udraws and mdraws must be vectors with the same length"
     stop(msg)
   }
 
-  if(any(leapfrogs != as.integer(leapfrogs))) {
+  if (any(leapfrogs != as.integer(leapfrogs))) {
     msg <- "leapfrogs must be an integer"
     stop(msg)
   }
 
-  if(N != rstan::get_num_upars(fit)) {
-    msg <- paste("Supplied upars has", N,
-                 "parameters but model has", rstan::get_num_upars(fit),
-                 "parameters")
+  if (N != rstan::get_num_upars(fit)) {
+    msg <- paste(
+      "Supplied upars has", N,
+      "parameters but model has", rstan::get_num_upars(fit),
+      "parameters"
+    )
     stop(msg)
   }
 
-  if(stepsize <= 0.0) {
+  if (stepsize <= 0.0) {
     msg <- "stepsize must be greater than 0"
     stop(msg)
   }
 
-  upath = matrix(0, nrow = 2 * leapfrogs + 1, ncol = N)
+  upath <- matrix(0, nrow = 2 * leapfrogs + 1, ncol = N)
   colnames(upath) <- column_names
-  hamiltonian = rep(0, 2 * leapfrogs + 1)
-  upath[leapfrogs + 1,] = udraws
-  q = udraws
-  p = -mdraws
-  grad_lp = grad_log_prob(fit, q)
-  hamiltonian[leapfrogs + 1] = -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
-  p = p - stepsize * -grad_lp / 2
-  give_up = FALSE
-  for(i in (leapfrogs + 2):nrow(upath)) {
-    q = q + stepsize * inv_metric %*% p
-    if(any(is.nan(q))) {
-      give_up = TRUE
+  hamiltonian <- rep(0, 2 * leapfrogs + 1)
+  upath[leapfrogs + 1, ] <- udraws
+  q <- udraws
+  p <- -mdraws
+  grad_lp <- grad_log_prob(fit, q)
+  hamiltonian[leapfrogs + 1] <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  p <- p - stepsize * -grad_lp / 2
+  give_up <- FALSE
+  for (i in (leapfrogs + 2):nrow(upath)) {
+    q <- q + stepsize * inv_metric %*% p
+    if (any(is.nan(q))) {
+      give_up <- TRUE
     }
 
-    if(give_up) {
-      upath[i,] = NaN
-      hamiltonian[i] = NaN
+    if (give_up) {
+      upath[i, ] <- NaN
+      hamiltonian[i] <- NaN
     } else {
-      upath[i,] = q
-      grad_lp = grad_log_prob(fit, q)
-      ph = p - stepsize * -grad_lp / 2.0
-      hamiltonian[i] = -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
-      p = p - stepsize * -grad_lp
+      upath[i, ] <- q
+      grad_lp <- grad_log_prob(fit, q)
+      ph <- p - stepsize * -grad_lp / 2.0
+      hamiltonian[i] <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      p <- p - stepsize * -grad_lp
     }
   }
 
-  q = udraws
-  p = -mdraws
-  grad_lp = grad_log_prob(fit, q)
-  hamiltonian[leapfrogs + 1] = -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
-  p = p + stepsize * -grad_lp / 2
-  give_up = FALSE
-  for(i in leapfrogs:1) {
-    q = q - stepsize * inv_metric %*% p
-    if(any(is.nan(q))) {
-      give_up = TRUE
+  q <- udraws
+  p <- -mdraws
+  grad_lp <- grad_log_prob(fit, q)
+  hamiltonian[leapfrogs + 1] <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  p <- p + stepsize * -grad_lp / 2
+  give_up <- FALSE
+  for (i in leapfrogs:1) {
+    q <- q - stepsize * inv_metric %*% p
+    if (any(is.nan(q))) {
+      give_up <- TRUE
     }
 
-    if(give_up) {
-      upath[i,] = NaN
-      hamiltonian[i] = NaN
+    if (give_up) {
+      upath[i, ] <- NaN
+      hamiltonian[i] <- NaN
     } else {
-      upath[i,] = q
-      grad_lp = grad_log_prob(fit, q)
-      ph = p + stepsize * -grad_lp / 2.0
-      hamiltonian[i] = -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
-      p = p + stepsize * -grad_lp
+      upath[i, ] <- q
+      grad_lp <- grad_log_prob(fit, q)
+      ph <- p + stepsize * -grad_lp / 2.0
+      hamiltonian[i] <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      p <- p + stepsize * -grad_lp
     }
   }
 
   dplyr::as_tibble(upath) %>%
-    dplyr::mutate(hamiltonian = hamiltonian,
-                  step = -leapfrogs:leapfrogs) %>%
+    dplyr::mutate(
+      hamiltonian = hamiltonian,
+      step = -leapfrogs:leapfrogs
+    ) %>%
     dplyr::select(hamiltonian, step, dplyr::everything())
 }

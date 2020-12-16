@@ -18,8 +18,10 @@ Software 76(1).
 \author{
 Juho Timonen (first.last at iki.fi) and Ben Bales
 }
-\keyword{Carlo}
+\keyword{Carlo,}
 \keyword{Hamiltonian}
 \keyword{Monte}
 \keyword{Stan,}
 \keyword{adaptation,}
+\keyword{development}
+\keyword{tools}
