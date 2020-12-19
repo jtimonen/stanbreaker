@@ -29,4 +29,5 @@ Imports:
     rstan (>= 2.21.2),
     ggplot2 (>= 3.3),
     dplyr (>= 1.0.0),
+    stringr (>= 1.4.0),
     posterior(>= 0.1.2)
