@@ -25,6 +25,7 @@ This formatting function
 }
 \seealso{
 Other code formatting functions: 
-\code{\link{format_code_helpers}}
+\code{\link{format_code_helpers}},
+\code{\link{split_code}()}
 }
 \concept{code formatting functions}

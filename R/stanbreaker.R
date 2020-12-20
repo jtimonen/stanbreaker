@@ -12,6 +12,7 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import posterior
+#' @importFrom stats runif sd step
 #'
 #' @references
 #' \enumerate{

@@ -105,3 +105,47 @@ locate_closing_bracket <- function(code) {
   }
   stop("matching closing bracket not found")
 }
+
+#' Split code at given location or first occurrence of a character
+#'
+#' @param code code to split as a string
+#' @param char character where to split (ignored if \code{idx} is not
+#' \code{NULL})
+#' @param idx index of the character where to split
+#' @return A named list with elements
+#' \itemize{
+#'   \item \code{before} - the part before the character
+#'   \item \code{after} - the part after the character
+#'   \item \code{char} - the value of \code{char} given as input, or the
+#'   character at location \code{idx}
+#' }
+#' If \code{char} is not found, \code{before} will be the original code
+#' and \code{after} and \code{char} will be an empty strings. If \code{char}
+#' is the first (last) character of \code{code}, then \code{before}
+#' (\code{after}) will be an empty string. The motivation is that
+#' \code{paste0(before, char, after)} will equal the original \code{code}.
+#' @family code formatting functions
+split_code <- function(code, char = "\n", idx = NULL) {
+  pattern <- paste0("[", char, "]")
+  if (is.null(idx)) {
+    idx <- stringr::str_locate(code, pattern)[[1]][1]
+  }
+  L <- nchar(code)
+  if (is.na(idx)) idx <- L + 1
+  before <- substr(code, 1, idx - 1)
+  char <- substr(code, idx, idx)
+  after <- substr(code, idx + 1, L)
+
+  # Create the list that will be returned
+  out <- list(before = before, char = char, after = after)
+
+  # Check correct behaviour
+  reconst <- paste0(out$before, out$char, out$after)
+  if (reconst != code) {
+    msg <- "split_code didn't work correctly, please report a bug!\n"
+    msg <- paste0(msg, "original = {", code, "}\n")
+    msg <- paste0(msg, "reconstruction = {", reconst, "}\n")
+    stop(msg)
+  }
+  return(out)
+}

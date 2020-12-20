@@ -43,6 +43,7 @@ bracket
 }
 \seealso{
 Other code formatting functions: 
-\code{\link{format_code}()}
+\code{\link{format_code}()},
+\code{\link{split_code}()}
 }
 \concept{code formatting functions}
