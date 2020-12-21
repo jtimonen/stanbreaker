@@ -12,8 +12,13 @@ test_that("additional spaces are removed", {
 test_that("indenting works", {
   code <- " this { is a \n piece \n} of code \n{{{{with brackets}}}}"
   correct <- paste0(
-    "this {\n  is a\n  piece\n}\nof code\n{\n  {\n    {\n",
-    "      {\n        with brackets\n      }\n    }\n  }\n}\n\n"
+    "this {\n  is a\n  piece\n} of code {\n  {\n    {\n      ",
+    "{\n        with brackets\n      }\n    }\n  }\n}\n"
   )
   expect_equal(format_code(code), correct)
+})
+
+test_that("8schools is not changed", {
+  code <- model_8schools
+  expect_equal(format_code(code), paste0(code, "\n"))
 })
