@@ -1,8 +1,9 @@
 #' The 'stanbreaker' package.
 #'
-#' @description Write description.
+#' @description All sorts of exciting things that might help
+#' Stan developers and users.
 #'
-#' @author Juho Timonen (first.last at iki.fi) and Ben Bales
+#' @author Ben Bales and Juho Timonen
 #' @keywords Stan, adaptation, Hamiltonian Monte Carlo, development tools
 #'
 #' @docType package

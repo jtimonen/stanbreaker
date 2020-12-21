@@ -13,7 +13,7 @@ fit_divergences <- function(fit) {
   # Get divergent transitions as vector of 0s and 1s
   divs <- fit$sampler_diagnostics() %>%
     posterior::as_draws_df() %>%
-    dplyr::pull(divergent__)
+    dplyr::pull("divergent__")
 
   # Get matrix of parameters
   draws <- fit$draws() %>%

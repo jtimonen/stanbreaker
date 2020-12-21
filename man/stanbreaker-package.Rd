@@ -6,7 +6,8 @@
 \alias{stanbreaker}
 \title{The 'stanbreaker' package.}
 \description{
-Write description.
+All sorts of exciting things that might help
+Stan developers and users.
 }
 \references{
 \enumerate{
@@ -16,7 +17,7 @@ Software 76(1).
 }
 }
 \author{
-Juho Timonen (first.last at iki.fi) and Ben Bales
+Ben Bales and Juho Timonen
 }
 \keyword{Carlo,}
 \keyword{Hamiltonian}

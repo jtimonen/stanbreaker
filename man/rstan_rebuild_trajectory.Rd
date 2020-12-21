@@ -2,15 +2,15 @@
 % Please edit documentation in R/rstan_rebuild_trajectory.R
 \name{rstan_rebuild_trajectory}
 \alias{rstan_rebuild_trajectory}
-\title{Recreate an HMC trajectory given a parameter and momentum draw, a maximum number
-of leapfrog steps to take, a stepsize, and an inverse metric}
+\title{Recreate an HMC trajectory}
 \usage{
 rstan_rebuild_trajectory(fit, udraws, mdraws, leapfrogs, stepsize, inv_metric)
 }
 \arguments{
 \item{fit}{An rstan stanfit object}
 
-\item{udraws}{A vector of unconstrained parameters to start the trajectory from}
+\item{udraws}{A vector of unconstrained parameters to start the trajectory
+from}
 
 \item{mdraws}{A vector of momentums to start the trajectory from}
 
@@ -24,6 +24,7 @@ rstan_rebuild_trajectory(fit, udraws, mdraws, leapfrogs, stepsize, inv_metric)
 A dataframe with the reconstructed trajectory
 }
 \description{
-Recreate an HMC trajectory given a parameter and momentum draw, a maximum number
-of leapfrog steps to take, a stepsize, and an inverse metric
+Recreate an HMC trajectory given a parameter and momentum draw,
+a maximum number of leapfrog steps to take, a stepsize, and an inverse
+metric.
 }

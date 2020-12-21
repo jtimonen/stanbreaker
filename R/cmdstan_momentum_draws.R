@@ -18,6 +18,12 @@ cmdstan_momentum_draws <- function(fit) {
   # Dimension of unconstrained space
   N <- (ncol(draws_df) - 4) / 3
   inds <- (N + 2):(2 * N + 1)
-  out <- draws_df %>% select(inds, `.chain`, `.iteration`, `.draw`)
+
+  # TODO: use quoted string literals
+  # Would this do the same thing?
+  #   col_names <- c(".chain", ".iteration", ".draw")
+  #   col_inds <- match(col_names, names(draws_df))
+  #   out <- draws_df %>% dplyr::select(inds, col_inds)
+  out <- draws_df %>% dplyr::select(inds, `.chain`, `.iteration`, `.draw`)
   return(out)
 }

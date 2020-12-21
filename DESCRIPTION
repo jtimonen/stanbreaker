@@ -2,18 +2,18 @@ Package: stanbreaker
 Title: Fast way to try out different things in Stan
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Juho",
+    c(person(given = "Ben", 
+           family = "Bales",
+           email = "bbbales2@gmail.com",
+           role = c("aut")),
+      person(given = "Juho",
            family = "Timonen",
            role = c("aut", "cre"),
            email = "juho.timonen@iki.fi",
-           comment = c(ORCID = "0000-0003-2341-6765")),
-    person(given = "Ben",
-           family = "Bales",
-           email = "bbbales2@gmail.com",
-           role = c("aut")))
-Description: Call cmdstan from R, with the possibility to break after a small
-    number of HMC adaptation iterations, and initializing new chains based on 
-    the short adaptation period. And all sorts of other exciting things!
+           comment = c(ORCID = "0000-0003-2341-6765"))
+    )
+Description: All sorts of exciting things that might help
+             Stan developers and users. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -8,17 +8,17 @@ corresponding eigenvector}
 rstan_power_method(fit, udraws, L = NULL, max_iterations = 200, tol = 1e-05)
 }
 \arguments{
-\item{fit}{An rstan stanfit}
+\item{fit}{An rstan stanfit.}
 
-\item{udraws}{Place(s) to compute Hessian(s) at}
+\item{udraws}{Place(s) to compute Hessian(s) at.}
 
-\item{L}{is an optional preconditioner matrix. If this is supplied
-compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}}
+\item{L}{An optional preconditioner matrix. If this is supplied
+compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}.}
 
-\item{max_iterations}{is the maximum number of power method iterations
-to use on any output}
+\item{max_iterations}{Maximum number of power method iterations
+to use on any output.}
 
-\item{tol}{is the relative tolerance check done on the eigenvalue}
+\item{tol}{Relative tolerance check done on the eigenvalue.}
 }
 \value{
 eigenvalue/eigenvector pairs
@@ -27,10 +27,9 @@ eigenvalue/eigenvector pairs
 \itemize{
 \item If \code{udraws} is a vector, the output is the eigenvalue/
 eigenvector pair computed at the point in parameter
-space corresponding to \code{udraws}
-
+space corresponding to \code{udraws}.
 \item If \code{udraws} is a matrix, each row is interpreted as a place
 to compute an eigenvalue/eigenvector pair and the output
-is a list of eigenvalue/eigenvector pairs
+is a list of eigenvalue/eigenvector pairs.
 }
 }

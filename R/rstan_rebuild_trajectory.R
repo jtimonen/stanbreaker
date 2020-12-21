@@ -1,17 +1,21 @@
-#' Recreate an HMC trajectory given a parameter and momentum draw, a maximum number
-#' of leapfrog steps to take, a stepsize, and an inverse metric
+#' Recreate an HMC trajectory
 #'
+#' @description Recreate an HMC trajectory given a parameter and momentum draw,
+#' a maximum number of leapfrog steps to take, a stepsize, and an inverse
+#' metric.
 #' @export
 #' @param fit An rstan stanfit object
-#' @param udraws A vector of unconstrained parameters to start the trajectory from
+#' @param udraws A vector of unconstrained parameters to start the trajectory
+#' from
 #' @param mdraws A vector of momentums to start the trajectory from
 #' @param leapfrogs Number of leapfrog steps to integrate in each direction
 #' @param stepsize Stepsize for leapfrog integrator
 #' @param inv_metric Positive definite inverse metric
 #' @return A dataframe with the reconstructed trajectory
-rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, inv_metric) {
+rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize,
+                                     inv_metric) {
   if (!setequal(class(fit), c("stanfit"))) {
-    msg <- "rfit argument should be a stanfit object (from rstan)"
+    msg <- "fit should be a stanfit object (from rstan)"
     stop(msg)
   }
 
@@ -23,7 +27,11 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
       x <- posterior::as_draws_matrix(x)
 
       if (nrow(x) > 1) {
-        msg <- paste("if argument", name, "is a posterior type, it can only have draw (and 1 chain)")
+        msg <- paste(
+          "if argument", name,
+          "is a posterior type, it can only have draw",
+          "(and 1 chain)"
+        )
         stop(msg)
       } else {
         return(as.vector(x))
@@ -85,8 +93,9 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
   upath[leapfrogs + 1, ] <- udraws
   q <- udraws
   p <- -mdraws
-  grad_lp <- grad_log_prob(fit, q)
-  hamiltonian[leapfrogs + 1] <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  grad_lp <- rstan::grad_log_prob(fit, q)
+  ham_value <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  hamiltonian[leapfrogs + 1] <- ham_value
   p <- p - stepsize * -grad_lp / 2
   give_up <- FALSE
   for (i in (leapfrogs + 2):nrow(upath)) {
@@ -100,17 +109,19 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
       hamiltonian[i] <- NaN
     } else {
       upath[i, ] <- q
-      grad_lp <- grad_log_prob(fit, q)
+      grad_lp <- rstan::grad_log_prob(fit, q)
       ph <- p - stepsize * -grad_lp / 2.0
-      hamiltonian[i] <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      ham_value <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      hamiltonian[i] <- ham_value
       p <- p - stepsize * -grad_lp
     }
   }
 
   q <- udraws
   p <- -mdraws
-  grad_lp <- grad_log_prob(fit, q)
-  hamiltonian[leapfrogs + 1] <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  grad_lp <- rstan::grad_log_prob(fit, q)
+  ham_value <- -attr(grad_lp, "log_prob") + p %*% inv_metric %*% p / 2.0
+  hamiltonian[leapfrogs + 1] <- ham_value
   p <- p + stepsize * -grad_lp / 2
   give_up <- FALSE
   for (i in leapfrogs:1) {
@@ -124,9 +135,10 @@ rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize, i
       hamiltonian[i] <- NaN
     } else {
       upath[i, ] <- q
-      grad_lp <- grad_log_prob(fit, q)
+      grad_lp <- rstan::grad_log_prob(fit, q)
       ph <- p + stepsize * -grad_lp / 2.0
-      hamiltonian[i] <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      ham_value <- -attr(grad_lp, "log_prob") + ph %*% inv_metric %*% ph / 2.0
+      hamiltonian[i] <- ham_value
       p <- p + stepsize * -grad_lp
     }
   }

@@ -3,27 +3,26 @@
 #'
 #' @description
 #' \itemize{
-#' \item If \code{udraws} is a vector, the output is the eigenvalue/
-#' eigenvector pair computed at the point in parameter
-#' space corresponding to \code{udraws}
-#'
-#' \item If \code{udraws} is a matrix, each row is interpreted as a place
-#' to compute an eigenvalue/eigenvector pair and the output
-#' is a list of eigenvalue/eigenvector pairs
+#'   \item If \code{udraws} is a vector, the output is the eigenvalue/
+#'     eigenvector pair computed at the point in parameter
+#'     space corresponding to \code{udraws}.
+#'   \item If \code{udraws} is a matrix, each row is interpreted as a place
+#'     to compute an eigenvalue/eigenvector pair and the output
+#'     is a list of eigenvalue/eigenvector pairs.
 #' }
 #' @export
-#' @param fit An rstan stanfit
-#' @param L is an optional preconditioner matrix. If this is supplied
-#' compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}
-#' @param max_iterations is the maximum number of power method iterations
-#' to use on any output
-#' @param tol is the relative tolerance check done on the eigenvalue
-#' @param udraws Place(s) to compute Hessian(s) at
+#' @param fit An rstan stanfit.
+#' @param L An optional preconditioner matrix. If this is supplied
+#' compute the eigenvalue/eigenvector pairs of \code{L^T * H * L}.
+#' @param max_iterations Maximum number of power method iterations
+#' to use on any output.
+#' @param tol Relative tolerance check done on the eigenvalue.
+#' @param udraws Place(s) to compute Hessian(s) at.
 #' @return eigenvalue/eigenvector pairs
 rstan_power_method <- function(fit, udraws, L = NULL,
                                max_iterations = 200, tol = 1e-5) {
   if (!setequal(class(fit), c("stanfit"))) {
-    msg <- "rfit argument should be a stanfit object (from rstan)"
+    msg <- "fit should be a stanfit object (from rstan)"
     stop(msg)
   }
 
@@ -79,8 +78,8 @@ rstan_power_method <- function(fit, udraws, L = NULL,
 
     f <- function(v) {
       v <- v / sqrt(sum(v^2))
-      (grad_log_prob(fit, u + dx * L %*% v) -
-        grad_log_prob(fit, u - dx * L %*% v)) / (2.0 * dx)
+      (rstan::grad_log_prob(fit, u + dx * L %*% v) -
+        rstan::grad_log_prob(fit, u - dx * L %*% v)) / (2.0 * dx)
     }
 
     Av <- f(v)
