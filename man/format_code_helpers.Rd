@@ -43,6 +43,7 @@ bracket
 }
 \seealso{
 Other code formatting helper functions: 
-\code{\link{ensure_leading_linebreak}()}
+\code{\link{ensure_leading_linebreak}()},
+\code{\link{split_code}()}
 }
 \concept{code formatting helper functions}

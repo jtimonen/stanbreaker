@@ -32,7 +32,8 @@ is the first (last) character of \code{code}, then \code{before}
 Split code at given location or first occurrence of a character
 }
 \seealso{
-Other code formatting functions: 
-\code{\link{format_code}()}
+Other code formatting helper functions: 
+\code{\link{ensure_leading_linebreak}()},
+\code{\link{format_code_helpers}}
 }
-\concept{code formatting functions}
+\concept{code formatting helper functions}
