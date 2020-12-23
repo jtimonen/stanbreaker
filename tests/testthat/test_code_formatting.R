@@ -22,3 +22,11 @@ test_that("8schools is not changed", {
   code <- model_8schools
   expect_equal(format_code(code), paste0(code, "\n"))
 })
+
+test_that("an error is thrown if there is no matching closing bracket", {
+  code <- "moi{joo} juu{{j"
+  err <- "matching closing bracket not found"
+  expect_error(format_code(code), err)
+  code <- substr(model_8schools, 1, nchar(model_8schools) - 2)
+  expect_error(format_code(code), err)
+})

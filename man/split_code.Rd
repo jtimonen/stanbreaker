@@ -33,7 +33,6 @@ Split code at given location or first occurrence of a character
 }
 \seealso{
 Other code formatting functions: 
-\code{\link{format_code_helpers}},
 \code{\link{format_code}()}
 }
 \concept{code formatting functions}

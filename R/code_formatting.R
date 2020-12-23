@@ -46,7 +46,7 @@ format_code <- function(code, spaces = 2) {
 #' @inheritParams format_code
 #' @param indent base level of indentation
 #' @param line line to format
-#' @family code formatting functions
+#' @family code formatting helper functions
 #' @return updated code as a string
 #' @name format_code_helpers
 
@@ -103,7 +103,7 @@ locate_closing_bracket <- function(code) {
   op <- stringr::str_locate_all(code, "[{]")[[1]][, 1]
   cl <- stringr::str_locate_all(code, "[}]")[[1]][, 1]
   N <- length(cl)
-  for (i in 1:N) {
+  for (i in seq_len(N)) {
     idx <- cl[i]
     if (sum(op < idx) < i) {
       return(idx)
@@ -162,6 +162,7 @@ split_code <- function(code, char = "\n", idx = NULL) {
 #'
 #' @param s a string
 #' @return modified string
+#' @family code formatting helper functions
 ensure_leading_linebreak <- function(s) {
   s_trim <- trimws(s, whitespace = "[ \t\r]")
   s1 <- substr(s_trim, 1, 1)

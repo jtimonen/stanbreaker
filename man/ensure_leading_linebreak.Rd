@@ -15,3 +15,8 @@ modified string
 \description{
 Add empty line to beginning of string if it doesn't exist already
 }
+\seealso{
+Other code formatting helper functions: 
+\code{\link{format_code_helpers}}
+}
+\concept{code formatting helper functions}
