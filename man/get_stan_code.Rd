@@ -22,7 +22,6 @@ Get full Stan code from a .stan file, possibly containing #includes
 }
 \seealso{
 Other code editing functions: 
-\code{\link{format_code}()},
 \code{\link{simplify_code}()}
 }
 \concept{code editing functions}

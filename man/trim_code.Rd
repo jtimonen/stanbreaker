@@ -2,7 +2,7 @@
 % Please edit documentation in R/code_formatting.R
 \name{trim_code}
 \alias{trim_code}
-\title{Remove trailing whitespace from each line}
+\title{Remove trailing whitespace from each code line}
 \usage{
 trim_code(code)
 }
@@ -13,5 +13,11 @@ trim_code(code)
 trimmed code
 }
 \description{
-Remove trailing whitespace from each line
+Remove trailing whitespace from each code line
 }
+\seealso{
+Other code formatting functions: 
+\code{\link{format_code}()},
+\code{\link{indent_code}()}
+}
+\concept{code formatting functions}

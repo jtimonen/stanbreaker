@@ -1,127 +1,31 @@
-#' Format code
+#' Format Stan code
 #'
 #' @description This formatting function
 #' \itemize{
-#'   \item indents code recursively based on opening and closing curly brackets
-#'   \item removes unnesessacy whitespace and line breaks
-#'   \item adds some needed linebreaks when missing
+#'   \item indents code based on opening and closing curly brackets
+#'   \item removes unnesessacy whitespace
 #' }
 #' @export
 #' @param code code as a string
 #' @param spaces number of spaces to add to indenting after each opening
 #' curly bracket (default = 2)
 #' @return updated code as a string
-#' @family code editing functions
+#' @family code formatting functions
 format_code <- function(code, spaces = 2) {
   code <- trim_code(code) # trim
-  code <- format_part(code, spaces, 0) # indent
-  code <- trim_code(code) # trim
-  code <- paste0(code, "\n") # empty last line
+  code <- indent_code(code, spaces) # indent
+  L <- nchar(code)
+  if (substr(code, L, L) != "\n") {
+    code <- paste0(code, "\n") # ensure empty last line
+  }
   return(code)
 }
 
-#' Helper functions for code formatting
+#' Remove trailing whitespace from each code line
 #'
-#' @description
-#' \itemize{
-#'   \item \code{format_part} is a helper function used recursively by
-#'   \code{format_code}
-#'   \item \code{justlify_left} is the base case of the recursion, which
-#'   justifies the code left at a given number of indentation spaces
-#'   \item \code{justify_line} first trims a line by removing leading and
-#'   trailing whitespace, and then justifies it correctly
-#'   \item \code{locate_opening_bracket} finds the first opening bracket
-#'   which is immediately followed by a line break
-#'   \item \code{locate_closing_bracket} finds the correct closing
-#'   bracket
-#' }
-#' @inheritParams format_code
-#' @param indent base level of indentation
-#' @param line line to format
-#' @family code formatting helper functions
-#' @return updated code as a string
-#' @name format_code_helpers
-
-#' @rdname format_code_helpers
-format_part <- function(code, spaces, indent) {
-  L <- nchar(code)
-  if (L == 0) {
-    return(code)
-  }
-
-  # First part
-  idx_op <- locate_opening_bracket(code)
-  split <- split_code(code, idx_op + 1)
-  part1 <- paste0(split$before, split$middle)
-  part1 <- justify_left(part1, indent)
-  if (split$middle == "") {
-    return(part1)
-  }
-
-  # Middle and end parts
-  part2 <- split$after
-  idx_cl <- locate_closing_bracket(part2)
-  split <- split_code(part2, idx_cl)
-  part2 <- format_part(split$before, spaces, indent + spaces)
-  part3 <- format_part(split$after, spaces, indent)
-
-  # Join the parts
-  closing <- justify_line("} ", indent)
-  out <- paste0(part1, "\n", part2, "\n", closing, part3)
-  return(out)
-}
-
-#' @rdname format_code_helpers
-justify_left <- function(code, indent) {
-  if (nchar(code) == 0) {
-    return(code)
-  }
-  lines <- strsplit(code, split = "\n")[[1]]
-  lines <- lapply(lines, justify_line, indent = indent)
-  code <- paste(lines, collapse = "\n")
-  return(code)
-}
-
-#' @rdname format_code_helpers
-justify_line <- function(line, indent) {
-  spaces <- paste(rep(" ", indent), collapse = "")
-  line <- trimws(line, "left", whitespace = "[ \t\r]")
-  line <- paste0(spaces, line)
-  return(line)
-}
-
-#' @rdname format_code_helpers
-locate_opening_bracket <- function(code) {
-  op <- stringr::str_locate_all(code, "[{]")[[1]][, 1]
-  N <- length(op)
-  L <- nchar(code)
-  for (i in seq_len(N)) {
-    idx <- op[i]
-    rem <- substr(code, idx + 1, L)
-    if (substr(rem, 1, 1) == "\n") {
-      return(idx)
-    }
-  }
-  return(NA)
-}
-
-#' @rdname format_code_helpers
-locate_closing_bracket <- function(code) {
-  op <- stringr::str_locate_all(code, "[{]")[[1]][, 1]
-  cl <- stringr::str_locate_all(code, "[}]")[[1]][, 1]
-  N <- length(cl)
-  for (i in seq_len(N)) {
-    idx <- cl[i]
-    if (sum(op < idx) < i) {
-      return(idx)
-    }
-  }
-  stop("matching closing bracket not found")
-}
-
-#' Remove trailing whitespace from each line
-#'
+#' @export
 #' @param code code to trim as a string
+#' @family code formatting functions
 #' @return trimmed code
 trim_code <- function(code) {
   lines <- strsplit(code, split = "\n")[[1]]
@@ -133,41 +37,79 @@ trim_code <- function(code) {
   return(code)
 }
 
-#' Split code at given location
+#' Indent code based on curly brackets
 #'
-#' @param code code to split as a string
-#' @param idx index of the character where to split
-#' @return A named list with elements
-#' \itemize{
-#'   \item \code{before} - the part before the pattern
-#'   \item \code{middle} - the character at the split location
-#'   \item \code{after} - the part after the pattern
-#' }
-#' @family code formatting helper functions
-split_code <- function(code, idx = NA) {
+#' @export
+#' @inheritParams format_code
+#' @family code formatting functions
+#' @return edited code
+indent_code <- function(code, spaces) {
   L <- nchar(code)
-  if (is.na(idx)) idx <- L + 1
-  before <- substr(code, 1, idx - 1)
-  middle <- substr(code, idx, idx)
-  after <- substr(code, idx + 1, L)
-
-  # Create the list that will be returned
-  out <- list(
-    before = before,
-    middle = middle,
-    after = after
-  )
-
-  # Check correct behaviour
-  reconst <- paste0(out$before, out$middle, out$after)
-  if (reconst != code) {
-    msg <- "split_code didn't work correctly!"
-    msg <- paste0(msg, " paste0(out$before, out$middle, out$after) doesn't")
-    msg <- paste0(msg, " match the original code.")
-    warning(msg)
-  }
-  return(out)
+  if (L == 0) return(code)
+  lines <- strsplit(code, "\n")[[1]]
+  arr <- count_indent_lines(lines)
+  lines <- apply_indent(lines, arr, spaces)
+  code <- paste(lines, collapse = "\n")
+  return(code)
 }
+
+#' Count how much each line should be indented
+#'
+#' @param lines array of code lines
+#' @family code formatting helper functions
+#' @return an integer array with same length as \code{lines}
+count_indent_lines <- function(lines) {
+  J <- length(lines)
+  arr <- rep(0, J)
+  for (j in seq_len(J)) {
+    ind_curr <- 0
+    ind_next <- 0
+    s <- lines[j]
+    s_trim <- trimws(s, whitespace = "[ \t\r]")
+    if (substr(s_trim, 1, 1) == "}") {
+      ind_curr <- -1
+      ind_next <- 1
+    }
+    n_op <- stringr::str_count(s, "[{]")
+    n_cl <- stringr::str_count(s, "[}]")
+
+    ind_next <- ind_next + n_op - n_cl
+    if (j + 1 <= J) arr[j + 1] <- arr[j + 1] + ind_next
+    arr[j] <- arr[j] + ind_curr
+  }
+  return(arr)
+}
+
+#' Apply indention to code lines
+#'
+#' @param lines array of code lines
+#' @param arr an array returned by \code{\link{count_indent_lines}}
+#' @family code formatting helper functions
+#' @return an edited array of code lines
+apply_indent <- function(lines, arr, spaces) {
+  J <- length(lines)
+  indent <- 0
+  for (j in seq_len(J)) {
+    indent <- indent + arr[j]*spaces
+    indent <- max(indent, 0)
+    lines[j] <- justify_line(lines[j], indent)
+  }
+  return(lines)
+}
+
+#' Param justify a line left
+#'
+#' @inheritParams format_code
+#' @param line code line as a string
+#' @family code formatting helper functions
+#' @return edited code line
+justify_line <- function(line, indent) {
+  spaces <- paste(rep(" ", indent), collapse = "")
+  line <- trimws(line, "left", whitespace = "[ \t\r]")
+  line <- paste0(spaces, line)
+  return(line)
+}
+
 
 #' Get full Stan code from a .stan file, possibly containing #includes
 #'
@@ -193,7 +135,7 @@ get_stan_code <- function(filename, spaces = 2, verbose = FALSE) {
 #' @return same as \code{readLines(file)}
 readLines_info <- function(file, verbose) {
   if (verbose) {
-    cat(paste0("reading lines from '", file, "'\n"))
+    cat(paste0("reading '", file, "'\n"))
   }
   readLines(con = file)
 }

@@ -19,7 +19,6 @@ Simplify a Stan program
 }
 \seealso{
 Other code editing functions: 
-\code{\link{format_code}()},
 \code{\link{get_stan_code}()}
 }
 \concept{code editing functions}
