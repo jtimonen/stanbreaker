@@ -22,6 +22,7 @@ remove_size0_data(code, data)
 updated code as a string
 }
 \description{
+NOT IMPLEMENTED YET
 \itemize{
 \item \code{remove_unused_functions} removes user-defined functions that
 are not needed

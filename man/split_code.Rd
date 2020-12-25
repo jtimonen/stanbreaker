@@ -2,38 +2,28 @@
 % Please edit documentation in R/code_formatting.R
 \name{split_code}
 \alias{split_code}
-\title{Split code at given location or first occurrence of a character}
+\title{Split code at given location}
 \usage{
-split_code(code, char = "\\n", idx = NULL)
+split_code(code, idx = NA)
 }
 \arguments{
 \item{code}{code to split as a string}
-
-\item{char}{character where to split (ignored if \code{idx} is not
-\code{NULL})}
 
 \item{idx}{index of the character where to split}
 }
 \value{
 A named list with elements
 \itemize{
-\item \code{before} - the part before the character
-\item \code{after} - the part after the character
-\item \code{char} - the value of \code{char} given as input, or the
-character at location \code{idx}
+\item \code{before} - the part before the pattern
+\item \code{middle} - the character at the split location
+\item \code{after} - the part after the pattern
 }
-If \code{char} is not found, \code{before} will be the original code
-and \code{after} and \code{char} will be an empty strings. If \code{char}
-is the first (last) character of \code{code}, then \code{before}
-(\code{after}) will be an empty string. The motivation is that
-\code{paste0(before, char, after)} will equal the original \code{code}.
 }
 \description{
-Split code at given location or first occurrence of a character
+Split code at given location
 }
 \seealso{
 Other code formatting helper functions: 
-\code{\link{ensure_leading_linebreak}()},
 \code{\link{format_code_helpers}}
 }
 \concept{code formatting helper functions}

@@ -13,19 +13,10 @@
 #' @return updated code as a string
 #' @family code editing functions
 format_code <- function(code, spaces = 2) {
-  # Indent and add line breaks
-  code <- format_part(code, spaces, 0)
-
-  # Remove trailing whitespace from each line
-  lines <- strsplit(code, split = "\n")[[1]]
-  trimmer <- function(line) {
-    trimws(line, "right", whitespace = "[ \t\r]")
-  }
-  lines <- lapply(lines, trimmer)
-  code <- paste(lines, collapse = "\n")
-
-  # Add empty last line
-  code <- paste0(code, "\n")
+  code <- trim_code(code) # trim
+  code <- format_part(code, spaces, 0) # indent
+  code <- trim_code(code) # trim
+  code <- paste0(code, "\n") # empty last line
   return(code)
 }
 
@@ -39,6 +30,8 @@ format_code <- function(code, spaces = 2) {
 #'   justifies the code left at a given number of indentation spaces
 #'   \item \code{justify_line} first trims a line by removing leading and
 #'   trailing whitespace, and then justifies it correctly
+#'   \item \code{locate_opening_bracket} finds the first opening bracket
+#'   which is immediately followed by a line break
 #'   \item \code{locate_closing_bracket} finds the correct closing
 #'   bracket
 #' }
@@ -57,24 +50,24 @@ format_part <- function(code, spaces, indent) {
   }
 
   # First part
-  split <- split_code(code, char = "{")
-  part1 <- split$before
+  idx_op <- locate_opening_bracket(code)
+  split <- split_code(code, idx_op + 1)
+  part1 <- paste0(split$before, split$middle)
   part1 <- justify_left(part1, indent)
-  if (split$char == "") {
+  if (split$middle == "") {
     return(part1)
   }
 
   # Middle and end parts
-  idx <- locate_closing_bracket(split$after)
-  split <- split_code(split$after, idx = idx)
+  part2 <- split$after
+  idx_cl <- locate_closing_bracket(part2)
+  split <- split_code(part2, idx_cl)
   part2 <- format_part(split$before, spaces, indent + spaces)
   part3 <- format_part(split$after, spaces, indent)
 
   # Join the parts
-  part2 <- ensure_leading_linebreak(part2)
-  opening <- justify_line("{", indent)
-  closing <- justify_line("}", indent)
-  out <- paste0(part1, opening, part2, "\n", closing, part3)
+  closing <- justify_line("} ", indent)
+  out <- paste0(part1, "\n", part2, "\n", closing, part3)
   return(out)
 }
 
@@ -98,6 +91,21 @@ justify_line <- function(line, indent) {
 }
 
 #' @rdname format_code_helpers
+locate_opening_bracket <- function(code) {
+  op <- stringr::str_locate_all(code, "[{]")[[1]][, 1]
+  N <- length(op)
+  L <- nchar(code)
+  for (i in seq_len(N)) {
+    idx <- op[i]
+    rem <- substr(code, idx + 1, L)
+    if (substr(rem, 1, 1) == "\n") {
+      return(idx)
+    }
+  }
+  return(NA)
+}
+
+#' @rdname format_code_helpers
 locate_closing_bracket <- function(code) {
   op <- stringr::str_locate_all(code, "[{]")[[1]][, 1]
   cl <- stringr::str_locate_all(code, "[}]")[[1]][, 1]
@@ -111,67 +119,54 @@ locate_closing_bracket <- function(code) {
   stop("matching closing bracket not found")
 }
 
-#' Split code at given location or first occurrence of a character
+#' Remove trailing whitespace from each line
+#'
+#' @param code code to trim as a string
+#' @return trimmed code
+trim_code <- function(code) {
+  lines <- strsplit(code, split = "\n")[[1]]
+  trimmer <- function(line) {
+    trimws(line, "right", whitespace = "[ \t\r]")
+  }
+  lines <- lapply(lines, trimmer)
+  code <- paste(lines, collapse = "\n")
+  return(code)
+}
+
+#' Split code at given location
 #'
 #' @param code code to split as a string
-#' @param char character where to split (ignored if \code{idx} is not
-#' \code{NULL})
 #' @param idx index of the character where to split
 #' @return A named list with elements
 #' \itemize{
-#'   \item \code{before} - the part before the character
-#'   \item \code{after} - the part after the character
-#'   \item \code{char} - the value of \code{char} given as input, or the
-#'   character at location \code{idx}
+#'   \item \code{before} - the part before the pattern
+#'   \item \code{middle} - the character at the split location
+#'   \item \code{after} - the part after the pattern
 #' }
-#' If \code{char} is not found, \code{before} will be the original code
-#' and \code{after} and \code{char} will be an empty strings. If \code{char}
-#' is the first (last) character of \code{code}, then \code{before}
-#' (\code{after}) will be an empty string. The motivation is that
-#' \code{paste0(before, char, after)} will equal the original \code{code}.
 #' @family code formatting helper functions
-split_code <- function(code, char = "\n", idx = NULL) {
-  char_in <- char
-  idx_in <- idx
-  pattern <- paste0("[", char, "]")
-  if (is.null(idx))
-    idx <- stringr::str_locate(code, pattern)[[1]][1]
+split_code <- function(code, idx = NA) {
   L <- nchar(code)
-  if (is.na(idx))
-    idx <- L + 1
+  if (is.na(idx)) idx <- L + 1
   before <- substr(code, 1, idx - 1)
-  char <- substr(code, idx, idx)
+  middle <- substr(code, idx, idx)
   after <- substr(code, idx + 1, L)
 
   # Create the list that will be returned
-  out <- list(before = before,
-              char = char,
-              after = after)
+  out <- list(
+    before = before,
+    middle = middle,
+    after = after
+  )
 
   # Check correct behaviour
-  reconst <- paste0(out$before, out$char, out$after)
+  reconst <- paste0(out$before, out$middle, out$after)
   if (reconst != code) {
-    msg <- "split_code didn't work correctly, please report a bug!\n\n"
-    msg <- paste0(msg, "original = {", code, "}\n")
-    msg <- paste0(msg, "reconstruction = {", reconst, "}\n\n")
-    msg <-
-      paste0(msg, "char_in = {", char_in, "}, idx_in = {", idx_in, "}\n")
-    stop(msg)
+    msg <- "split_code didn't work correctly!"
+    msg <- paste0(msg, " paste0(out$before, out$middle, out$after) doesn't")
+    msg <- paste0(msg, " match the original code.")
+    warning(msg)
   }
   return(out)
-}
-
-#' Add empty line to beginning of string if it doesn't exist already
-#'
-#' @param s a string
-#' @return modified string
-#' @family code formatting helper functions
-ensure_leading_linebreak <- function(s) {
-  s_trim <- trimws(s, whitespace = "[ \t\r]")
-  s1 <- substr(s_trim, 1, 1)
-  if (s1 != "\n")
-    s <- paste0("\n", s)
-  return(s)
 }
 
 #' Get full Stan code from a .stan file, possibly containing #includes

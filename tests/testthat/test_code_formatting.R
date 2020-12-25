@@ -10,11 +10,8 @@ test_that("additional spaces are removed", {
 })
 
 test_that("indenting works", {
-  code <- " this { is a \n piece \n} of code \n{{{{with brackets}}}}"
-  correct <- paste0(
-    "this {\n  is a\n  piece\n} of code {\n  {\n    {\n      ",
-    "{\n        with brackets\n      }\n    }\n  }\n}\n"
-  )
+  code <- " this { \nis a \n piece \n} of code {\n{{{with brackets}}}}"
+  correct <- "this {\n  is a\n  piece\n} of code {\n  {{{with brackets}}}\n}\n"
   expect_equal(format_code(code), correct)
 })
 
@@ -24,7 +21,7 @@ test_that("8schools is not changed", {
 })
 
 test_that("an error is thrown if there is no matching closing bracket", {
-  code <- "moi{joo} juu{{j"
+  code <- "moi{\njoo} juu{\n{\nj"
   err <- "matching closing bracket not found"
   expect_error(format_code(code), err)
   code <- substr(model_8schools, 1, nchar(model_8schools) - 2)

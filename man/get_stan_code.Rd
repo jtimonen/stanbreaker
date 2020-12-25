@@ -4,12 +4,14 @@
 \alias{get_stan_code}
 \title{Get full Stan code from a .stan file, possibly containing #includes}
 \usage{
-get_stan_code(filename, spaces = 2)
+get_stan_code(filename, spaces = 2, verbose = FALSE)
 }
 \arguments{
 \item{filename}{name of the main \code{.stan} file}
 
 \item{spaces}{number of spaces to use when indenting code (default = 2)}
+
+\item{verbose}{should some messages be printed?}
 }
 \value{
 the full program code as a string, formatted using

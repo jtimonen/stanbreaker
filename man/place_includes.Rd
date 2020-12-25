@@ -4,12 +4,14 @@
 \alias{place_includes}
 \title{A helper function called recursively by get_stan_code}
 \usage{
-place_includes(lines, parent_dir)
+place_includes(lines, parent_dir, verbose)
 }
 \arguments{
 \item{lines}{an array of strings, each representing one additional code line}
 
 \item{parent_dir}{parent directory for the Stan files}
+
+\item{verbose}{should some messages be printed?}
 }
 \value{
 full code as a string, without \code{#include} statements

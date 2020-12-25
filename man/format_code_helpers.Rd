@@ -5,6 +5,7 @@
 \alias{format_part}
 \alias{justify_left}
 \alias{justify_line}
+\alias{locate_opening_bracket}
 \alias{locate_closing_bracket}
 \title{Helper functions for code formatting}
 \usage{
@@ -13,6 +14,8 @@ format_part(code, spaces, indent)
 justify_left(code, indent)
 
 justify_line(line, indent)
+
+locate_opening_bracket(code)
 
 locate_closing_bracket(code)
 }
@@ -37,13 +40,14 @@ updated code as a string
 justifies the code left at a given number of indentation spaces
 \item \code{justify_line} first trims a line by removing leading and
 trailing whitespace, and then justifies it correctly
+\item \code{locate_opening_bracket} finds the first opening bracket
+which is immediately followed by a line break
 \item \code{locate_closing_bracket} finds the correct closing
 bracket
 }
 }
 \seealso{
 Other code formatting helper functions: 
-\code{\link{ensure_leading_linebreak}()},
 \code{\link{split_code}()}
 }
 \concept{code formatting helper functions}
