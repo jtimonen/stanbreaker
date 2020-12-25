@@ -4,12 +4,14 @@
 \alias{apply_indent}
 \title{Apply indention to code lines}
 \usage{
-apply_indent(lines, arr, spaces)
+apply_indent(lines, arr, spaces, trim)
 }
 \arguments{
 \item{lines}{array of code lines}
 
 \item{arr}{an array returned by \code{\link{count_indent_lines}}}
+
+\item{trim}{if this is true, left trimming is done}
 }
 \value{
 an edited array of code lines

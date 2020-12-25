@@ -4,10 +4,12 @@
 \alias{justify_line}
 \title{Param justify a line left}
 \usage{
-justify_line(line, indent)
+justify_line(line, indent, trim)
 }
 \arguments{
 \item{line}{code line as a string}
+
+\item{trim}{if this is true, left trimming is done}
 }
 \value{
 edited code line

@@ -4,10 +4,12 @@
 \alias{count_indent_lines}
 \title{Count how much each line should be indented}
 \usage{
-count_indent_lines(lines)
+count_indent_lines(lines, curly)
 }
 \arguments{
 \item{lines}{array of code lines}
+
+\item{curly}{is indention done based on curly brackets?}
 }
 \value{
 an integer array with same length as \code{lines}

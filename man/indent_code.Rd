@@ -2,21 +2,23 @@
 % Please edit documentation in R/code_formatting.R
 \name{indent_code}
 \alias{indent_code}
-\title{Indent code based on curly brackets}
+\title{Indent code based on (curly) brackets}
 \usage{
-indent_code(code, spaces)
+indent_code(code, spaces, curly = TRUE)
 }
 \arguments{
 \item{code}{code as a string}
 
 \item{spaces}{number of spaces to add to indenting after each opening
 curly bracket (default = 2)}
+
+\item{curly}{is indention done based on curly brackets?}
 }
 \value{
 edited code
 }
 \description{
-Indent code based on curly brackets
+Indent code based on (curly) brackets
 }
 \seealso{
 Other code formatting functions: 

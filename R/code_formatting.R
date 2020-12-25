@@ -13,7 +13,8 @@
 #' @family code formatting functions
 format_code <- function(code, spaces = 2) {
   code <- trim_code(code) # trim
-  code <- indent_code(code, spaces) # indent
+  code <- indent_code(code, spaces, curly = TRUE) # indent
+  code <- indent_code(code, spaces, curly = FALSE) # indent
   L <- nchar(code)
   if (substr(code, L, L) != "\n") {
     code <- paste0(code, "\n") # ensure empty last line
@@ -37,18 +38,21 @@ trim_code <- function(code) {
   return(code)
 }
 
-#' Indent code based on curly brackets
+#' Indent code based on (curly) brackets
 #'
 #' @export
 #' @inheritParams format_code
+#' @param curly is indention done based on curly brackets?
 #' @family code formatting functions
 #' @return edited code
-indent_code <- function(code, spaces) {
+indent_code <- function(code, spaces, curly = TRUE) {
   L <- nchar(code)
-  if (L == 0) return(code)
+  if (L == 0) {
+    return(code)
+  }
   lines <- strsplit(code, "\n")[[1]]
-  arr <- count_indent_lines(lines)
-  lines <- apply_indent(lines, arr, spaces)
+  arr <- count_indent_lines(lines, curly)
+  lines <- apply_indent(lines, arr, spaces, trim = curly)
   code <- paste(lines, collapse = "\n")
   return(code)
 }
@@ -56,9 +60,12 @@ indent_code <- function(code, spaces) {
 #' Count how much each line should be indented
 #'
 #' @param lines array of code lines
+#' @inheritParams indent_code
 #' @family code formatting helper functions
 #' @return an integer array with same length as \code{lines}
-count_indent_lines <- function(lines) {
+count_indent_lines <- function(lines, curly) {
+  char1 <- if (curly) "{" else "("
+  char2 <- if (curly) "}" else ")"
   J <- length(lines)
   arr <- rep(0, J)
   for (j in seq_len(J)) {
@@ -66,12 +73,12 @@ count_indent_lines <- function(lines) {
     ind_next <- 0
     s <- lines[j]
     s_trim <- trimws(s, whitespace = "[ \t\r]")
-    if (substr(s_trim, 1, 1) == "}") {
+    if (substr(s_trim, 1, 1) == char2) {
       ind_curr <- -1
       ind_next <- 1
     }
-    n_op <- stringr::str_count(s, "[{]")
-    n_cl <- stringr::str_count(s, "[}]")
+    n_op <- stringr::str_count(s, paste0("[", char1, "]"))
+    n_cl <- stringr::str_count(s, paste0("[", char2, "]"))
 
     ind_next <- ind_next + n_op - n_cl
     if (j + 1 <= J) arr[j + 1] <- arr[j + 1] + ind_next
@@ -83,16 +90,17 @@ count_indent_lines <- function(lines) {
 #' Apply indention to code lines
 #'
 #' @param lines array of code lines
+#' @inheritParams justify_line
 #' @param arr an array returned by \code{\link{count_indent_lines}}
 #' @family code formatting helper functions
 #' @return an edited array of code lines
-apply_indent <- function(lines, arr, spaces) {
+apply_indent <- function(lines, arr, spaces, trim) {
   J <- length(lines)
   indent <- 0
   for (j in seq_len(J)) {
-    indent <- indent + arr[j]*spaces
+    indent <- indent + arr[j] * spaces
     indent <- max(indent, 0)
-    lines[j] <- justify_line(lines[j], indent)
+    lines[j] <- justify_line(lines[j], indent, trim)
   }
   return(lines)
 }
@@ -101,11 +109,14 @@ apply_indent <- function(lines, arr, spaces) {
 #'
 #' @inheritParams format_code
 #' @param line code line as a string
+#' @param trim if this is true, left trimming is done
 #' @family code formatting helper functions
 #' @return edited code line
-justify_line <- function(line, indent) {
+justify_line <- function(line, indent, trim) {
   spaces <- paste(rep(" ", indent), collapse = "")
-  line <- trimws(line, "left", whitespace = "[ \t\r]")
+  if (trim) {
+    line <- trimws(line, "left", whitespace = "[ \t\r]")
+  }
   line <- paste0(spaces, line)
   return(line)
 }
