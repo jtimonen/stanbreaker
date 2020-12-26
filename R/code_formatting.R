@@ -57,6 +57,78 @@ indent_code <- function(code, spaces, curly = TRUE) {
   return(code)
 }
 
+
+#' Get full Stan code from a .stan file, possibly containing #includes
+#'
+#' @export
+#' @param filename name of the main \code{.stan} file
+#' @param spaces number of spaces to use when indenting code (default = 2)
+#' @param verbose should some messages be printed?
+#' @return the full program code as a string, formatted using
+#' \code{format_code}
+#' @family code formatting functions
+get_stan_code <- function(filename, spaces = 2, verbose = FALSE) {
+  lines <- readLines_info(filename, verbose)
+  parent_dir <- normalizePath(dirname(filename))
+  code <- place_includes(lines, parent_dir, verbose)
+  code <- format_code(code, spaces = spaces)
+  return(code)
+}
+
+#' A helper function called recursively by get_stan_code
+#'
+#' @param lines an array of strings, each representing one additional code line
+#' @param parent_dir parent directory for the Stan files
+#' @inheritParams get_stan_code
+#' @return full code as a string, without \code{#include} statements
+place_includes <- function(lines, parent_dir, verbose) {
+
+  # Loop through code lines
+  code <- ""
+  L <- length(lines)
+  for (j in seq_len(L)) {
+    # Check if this line begins with #include
+    line <- lines[j]
+    line <- trimws(line)
+    start <- substr(line, 1, 8)
+    if (start == "#include") {
+
+      # Get name of file to be included
+      fn <- substr(line, 9, nchar(line))
+      fn <- trimws(fn)
+      fn <- file.path(parent_dir, fn)
+
+      # Get the part to include
+      to_add <- readLines_info(fn, verbose)
+      to_add <- place_includes(to_add, parent_dir, verbose)
+    } else {
+      to_add <- lines[j]
+    }
+
+    # Add the part to add
+    if (j == 1) {
+      code <- to_add
+    } else {
+      code <- paste(code, to_add, sep = "\n")
+    }
+  }
+  return(code)
+}
+
+
+#' Read lines of a file and show an informational message if verbose is true
+#'
+#' @param file path to file
+#' @param verbose should the message be printed
+#' @return same as \code{readLines(file)}
+readLines_info <- function(file, verbose) {
+  if (verbose) {
+    cat(paste0("reading '", file, "'\n"))
+  }
+  readLines(con = file)
+}
+
+
 #' Count how much each line should be indented
 #'
 #' @param lines array of code lines
@@ -119,119 +191,4 @@ justify_line <- function(line, indent, trim) {
   }
   line <- paste0(spaces, line)
   return(line)
-}
-
-
-#' Get full Stan code from a .stan file, possibly containing #includes
-#'
-#' @export
-#' @param filename name of the main \code{.stan} file
-#' @param spaces number of spaces to use when indenting code (default = 2)
-#' @param verbose should some messages be printed?
-#' @return the full program code as a string, formatted using
-#' \code{format_code}
-#' @family code editing functions
-get_stan_code <- function(filename, spaces = 2, verbose = FALSE) {
-  lines <- readLines_info(filename, verbose)
-  parent_dir <- normalizePath(dirname(filename))
-  code <- place_includes(lines, parent_dir, verbose)
-  code <- format_code(code, spaces = spaces)
-  return(code)
-}
-
-#' Read lines of a file and show an informational message if verbose is true
-#'
-#' @param file path to file
-#' @param verbose should the message be printed
-#' @return same as \code{readLines(file)}
-readLines_info <- function(file, verbose) {
-  if (verbose) {
-    cat(paste0("reading '", file, "'\n"))
-  }
-  readLines(con = file)
-}
-
-#' A helper function called recursively by get_stan_code
-#'
-#' @param lines an array of strings, each representing one additional code line
-#' @param parent_dir parent directory for the Stan files
-#' @inheritParams get_stan_code
-#' @return full code as a string, without \code{#include} statements
-place_includes <- function(lines, parent_dir, verbose) {
-
-  # Loop through code lines
-  code <- ""
-  L <- length(lines)
-  for (j in seq_len(L)) {
-    # Check if this line begins with #include
-    line <- lines[j]
-    line <- trimws(line)
-    start <- substr(line, 1, 8)
-    if (start == "#include") {
-
-      # Get name of file to be included
-      fn <- substr(line, 9, nchar(line))
-      fn <- trimws(fn)
-      fn <- file.path(parent_dir, fn)
-
-      # Get the part to include
-      to_add <- readLines_info(fn, verbose)
-      to_add <- place_includes(to_add, parent_dir, verbose)
-    } else {
-      to_add <- lines[j]
-    }
-
-    # Add the part to add
-    if (j == 1) {
-      code <- to_add
-    } else {
-      code <- paste(code, to_add, sep = "\n")
-    }
-  }
-  return(code)
-}
-
-#' Simplify a Stan program
-#'
-#' @export
-#' @param code the Stan code for the program
-#' @param data the supplied data list (in \code{rstan} format)
-#' @return updated code as a string
-#' @family code editing functions
-simplify_code <- function(code, data) {
-  stop("not implemented yet!")
-  code <- remove_empty_forloops(code, data)
-  code <- remove_size0_data(code, data)
-  code <- remove_unused_functions(code, data)
-  return(code)
-}
-
-#' Helper functions for Stan code simplification
-#'
-#' @description NOT IMPLEMENTED YET
-#' \itemize{
-#'   \item \code{remove_unused_functions} removes user-defined functions that
-#'   are not needed
-#'   \item \code{remove_empty_forloops} removes for loops that would loop from
-#'   1 to 0
-#'   \item \code{remove_size0_data} removes data declarations which would have
-#'   a dimension of size 0
-#' }
-#' @inheritParams simplify_code
-#' @return updated code as a string
-#' @name simplify_code_helpers
-
-#' @rdname simplify_code_helpers
-remove_unused_functions <- function(code, data) {
-  return(code)
-}
-
-#' @rdname simplify_code_helpers
-remove_empty_forloops <- function(code, data) {
-  return(code)
-}
-
-#' @rdname simplify_code_helpers
-remove_size0_data <- function(code, data) {
-  return(code)
 }

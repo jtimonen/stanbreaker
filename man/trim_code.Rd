@@ -18,6 +18,7 @@ Remove trailing whitespace from each code line
 \seealso{
 Other code formatting functions: 
 \code{\link{format_code}()},
+\code{\link{get_stan_code}()},
 \code{\link{indent_code}()}
 }
 \concept{code formatting functions}

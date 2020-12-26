@@ -21,7 +21,9 @@ the full program code as a string, formatted using
 Get full Stan code from a .stan file, possibly containing #includes
 }
 \seealso{
-Other code editing functions: 
-\code{\link{simplify_code}()}
+Other code formatting functions: 
+\code{\link{format_code}()},
+\code{\link{indent_code}()},
+\code{\link{trim_code}()}
 }
-\concept{code editing functions}
+\concept{code formatting functions}

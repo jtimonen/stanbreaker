@@ -24,6 +24,7 @@ This formatting function
 }
 \seealso{
 Other code formatting functions: 
+\code{\link{get_stan_code}()},
 \code{\link{indent_code}()},
 \code{\link{trim_code}()}
 }
