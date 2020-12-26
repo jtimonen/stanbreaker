@@ -23,7 +23,7 @@ Indent code based on (curly) brackets
 \seealso{
 Other code formatting functions: 
 \code{\link{format_code}()},
-\code{\link{get_stan_code}()},
+\code{\link{place_includes}()},
 \code{\link{trim_code}()}
 }
 \concept{code formatting functions}

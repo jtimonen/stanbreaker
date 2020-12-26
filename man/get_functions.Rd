@@ -4,15 +4,21 @@
 \alias{get_functions}
 \title{Get names of all user-defined functions}
 \usage{
-get_functions(code)
+get_functions(code, ...)
 }
 \arguments{
-\item{code}{full stan code without any includes}
+\item{code}{full stan code}
+
+\item{...}{additional arguments to \code{\link{place_includes}}}
 }
 \value{
 a data frame
 }
 \description{
 Get names of all user-defined functions
+}
+\seealso{
+Other code analysis functions: 
+\code{\link{get_stan_code}()}
 }
 \concept{code analysis functions}

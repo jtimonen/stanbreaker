@@ -57,31 +57,31 @@ indent_code <- function(code, spaces, curly = TRUE) {
   return(code)
 }
 
-
-#' Get full Stan code from a .stan file, possibly containing #includes
+#' Place possible #includes into Stan code
 #'
 #' @export
-#' @param filename name of the main \code{.stan} file
+#' @param code the Stan program code as a string
+#' @param parent_dir parent directory for the \code{#include}d files
 #' @param spaces number of spaces to use when indenting code (default = 2)
 #' @param verbose should some messages be printed?
 #' @return the full program code as a string, formatted using
 #' \code{format_code}
 #' @family code formatting functions
-get_stan_code <- function(filename, spaces = 2, verbose = FALSE) {
-  lines <- readLines_info(filename, verbose)
-  parent_dir <- normalizePath(dirname(filename))
-  code <- place_includes(lines, parent_dir, verbose)
+place_includes <- function(code, parent_dir = getwd(),
+                           spaces = 2, verbose = FALSE) {
+  lines <- strsplit(code, "\n")[[1]]
+  code <- place_includes_lines(lines, parent_dir, verbose)
   code <- format_code(code, spaces = spaces)
   return(code)
 }
 
-#' A helper function called recursively by get_stan_code
+#' A helper function called recursively by place_includes
 #'
 #' @param lines an array of strings, each representing one additional code line
 #' @param parent_dir parent directory for the Stan files
 #' @inheritParams get_stan_code
 #' @return full code as a string, without \code{#include} statements
-place_includes <- function(lines, parent_dir, verbose) {
+place_includes_lines <- function(lines, parent_dir, verbose) {
 
   # Loop through code lines
   code <- ""
@@ -100,7 +100,7 @@ place_includes <- function(lines, parent_dir, verbose) {
 
       # Get the part to include
       to_add <- readLines_info(fn, verbose)
-      to_add <- place_includes(to_add, parent_dir, verbose)
+      to_add <- place_includes_lines(to_add, parent_dir, verbose)
     } else {
       to_add <- lines[j]
     }

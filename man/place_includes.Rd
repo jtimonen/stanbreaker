@@ -2,20 +2,30 @@
 % Please edit documentation in R/code_formatting.R
 \name{place_includes}
 \alias{place_includes}
-\title{A helper function called recursively by get_stan_code}
+\title{Place possible #includes into Stan code}
 \usage{
-place_includes(lines, parent_dir, verbose)
+place_includes(code, parent_dir = getwd(), spaces = 2, verbose = FALSE)
 }
 \arguments{
-\item{lines}{an array of strings, each representing one additional code line}
+\item{code}{the Stan program code as a string}
 
-\item{parent_dir}{parent directory for the Stan files}
+\item{parent_dir}{parent directory for the \code{#include}d files}
+
+\item{spaces}{number of spaces to use when indenting code (default = 2)}
 
 \item{verbose}{should some messages be printed?}
 }
 \value{
-full code as a string, without \code{#include} statements
+the full program code as a string, formatted using
+\code{format_code}
 }
 \description{
-A helper function called recursively by get_stan_code
+Place possible #includes into Stan code
 }
+\seealso{
+Other code formatting functions: 
+\code{\link{format_code}()},
+\code{\link{indent_code}()},
+\code{\link{trim_code}()}
+}
+\concept{code formatting functions}

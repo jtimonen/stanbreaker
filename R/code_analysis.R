@@ -1,10 +1,29 @@
+#' Get full Stan code from a .stan file
+#'
+#' @export
+#' @param filename name of the main \code{.stan} file
+#' @param spaces number of spaces to use when indenting code (default = 2)
+#' @param verbose should some messages be printed?
+#' @return the full program code as a string, formatted using
+#' \code{format_code}, \code{#include}s placed
+#' @family code analysis functions
+get_stan_code <- function(filename, spaces = 2, verbose = FALSE) {
+  lines <- readLines_info(filename, verbose)
+  parent_dir <- normalizePath(dirname(filename))
+  code <- place_includes_lines(lines, parent_dir, verbose)
+  code <- format_code(code, spaces = spaces)
+  return(code)
+}
+
 #' Get names of all user-defined functions
 #'
 #' @export
-#' @param code full stan code without any includes
+#' @param code full stan code
+#' @param ... additional arguments to \code{\link{place_includes}}
 #' @family code analysis functions
 #' @return a data frame
-get_functions <- function(code) {
+get_functions <- function(code, ...) {
+  code <- place_includes(code, ...)
   r <- find_functions(code)
   df <- count_functions_usage(r, code)
   return(df)
