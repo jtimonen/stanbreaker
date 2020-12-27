@@ -178,7 +178,7 @@ apply_indent <- function(lines, arr, spaces, trim) {
   return(lines)
 }
 
-#' Param justify a line left
+#' Justify a line left
 #'
 #' @inheritParams format_code
 #' @param line code line as a string

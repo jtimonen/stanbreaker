@@ -22,7 +22,7 @@ rstan_hessian <- function(fit, udraws) {
     udraws <- matrix(udraws, nrow = nrow(udraws))
   }
 
-  cbrt_epsilon <- .Machine$double.eps^(1 / 3)
+  cbrt_epsilon <- .Machine$double.eps**(1 / 3)
   M <- nrow(udraws)
   N <- ncol(udraws)
 

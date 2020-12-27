@@ -2,7 +2,7 @@
 % Please edit documentation in R/code_formatting.R
 \name{justify_line}
 \alias{justify_line}
-\title{Param justify a line left}
+\title{Justify a line left}
 \usage{
 justify_line(line, spaces, trim)
 }
@@ -18,7 +18,7 @@ curly bracket (default = 2)}
 edited code line
 }
 \description{
-Param justify a line left
+Justify a line left
 }
 \seealso{
 Other code formatting helper functions: 

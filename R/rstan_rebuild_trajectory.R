@@ -14,6 +14,10 @@
 #' @return A dataframe with the reconstructed trajectory
 rstan_rebuild_trajectory <- function(fit, udraws, mdraws, leapfrogs, stepsize,
                                      inv_metric) {
+
+  # TODO: this function has very high cyclomatic complexity (many if-elses)
+  # We should consider making it more readable by separating parts to
+  # sub-functions
   if (!setequal(class(fit), c("stanfit"))) {
     msg <- "fit should be a stanfit object (from rstan)"
     stop(msg)

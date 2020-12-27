@@ -21,6 +21,10 @@
 #' @return eigenvalue/eigenvector pairs
 rstan_power_method <- function(fit, udraws, L = NULL,
                                max_iterations = 200, tol = 1e-5) {
+
+  # TODO: this function has high cyclomatic complexity (many if-elses)
+  # We should consider making it more readable by separating parts to
+  # sub-functions
   if (!setequal(class(fit), c("stanfit"))) {
     msg <- "fit should be a stanfit object (from rstan)"
     stop(msg)
@@ -32,7 +36,7 @@ rstan_power_method <- function(fit, udraws, L = NULL,
     udraws <- matrix(udraws, nrow = nrow(udraws))
   }
 
-  cbrt_epsilon <- .Machine$double.eps^(1 / 3)
+  cbrt_epsilon <- .Machine$double.eps**(1 / 3)
   M <- nrow(udraws)
   N <- ncol(udraws)
 
