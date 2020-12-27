@@ -11,6 +11,9 @@ apply_indent(lines, arr, spaces, trim)
 
 \item{arr}{an array returned by \code{\link{count_indent_lines}}}
 
+\item{spaces}{number of spaces to add to indenting after each opening
+curly bracket (default = 2)}
+
 \item{trim}{if this is true, left trimming is done}
 }
 \value{

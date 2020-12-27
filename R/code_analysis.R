@@ -34,6 +34,7 @@ get_functions <- function(code, ...) {
 #' @param code Stan code as a string
 #' @param block name of block
 #' @return a named list with three parts
+#' \code{before}, \code{middle} and \code{after)
 find_block <- function(code, block) {
   pattern <- paste0(block, "*[{]")
   idx_op <- stringr::str_locate(code, pattern)[1, 2]
@@ -61,9 +62,11 @@ find_block <- function(code, block) {
 #' Check that code split matches original code
 #'
 #' @param code full code
-#' @param rec split
-#' @param verbose should the message be printed
-#' @return same as \code{readLines(file)}
+#' @param rec split code, as a named list with names \code{before},
+#' \code{middle}, and \code{after}
+#' @return returns \code{code} invisibly, or throws an error if
+#' \code{paste0(rec$before, rec$middle, rec$after)}
+#' doesn't match the original code
 check_split <- function(code, rec) {
   reconst <- paste0(rec$before, rec$middle, rec$after)
   if (code != reconst) {

@@ -4,10 +4,13 @@
 \alias{justify_line}
 \title{Param justify a line left}
 \usage{
-justify_line(line, indent, trim)
+justify_line(line, spaces, trim)
 }
 \arguments{
 \item{line}{code line as a string}
+
+\item{spaces}{number of spaces to add to indenting after each opening
+curly bracket (default = 2)}
 
 \item{trim}{if this is true, left trimming is done}
 }

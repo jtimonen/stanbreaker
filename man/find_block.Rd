@@ -13,6 +13,7 @@ find_block(code, block)
 }
 \value{
 a named list with three parts
+\code{before}, \code{middle} and \code{after)
 }
 \description{
 Find a block from Stan code

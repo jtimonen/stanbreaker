@@ -163,6 +163,7 @@ count_indent_lines <- function(lines, curly) {
 #'
 #' @param lines array of code lines
 #' @inheritParams justify_line
+#' @inheritParams indent_code
 #' @param arr an array returned by \code{\link{count_indent_lines}}
 #' @family code formatting helper functions
 #' @return an edited array of code lines
@@ -184,11 +185,11 @@ apply_indent <- function(lines, arr, spaces, trim) {
 #' @param trim if this is true, left trimming is done
 #' @family code formatting helper functions
 #' @return edited code line
-justify_line <- function(line, indent, trim) {
-  spaces <- paste(rep(" ", indent), collapse = "")
+justify_line <- function(line, spaces, trim) {
+  ws <- paste(rep(" ", spaces), collapse = "")
   if (trim) {
     line <- trimws(line, "left", whitespace = "[ \t\r]")
   }
-  line <- paste0(spaces, line)
+  line <- paste0(ws, line)
   return(line)
 }

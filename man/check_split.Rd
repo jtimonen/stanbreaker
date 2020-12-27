@@ -9,12 +9,13 @@ check_split(code, rec)
 \arguments{
 \item{code}{full code}
 
-\item{rec}{split}
-
-\item{verbose}{should the message be printed}
+\item{rec}{split code, as a named list with names \code{before},
+\code{middle}, and \code{after}}
 }
 \value{
-same as \code{readLines(file)}
+returns \code{code} invisibly, or throws an error if
+\code{paste0(rec$before, rec$middle, rec$after)}
+doesn't match the original code
 }
 \description{
 Check that code split matches original code
