@@ -4,9 +4,6 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of stanbreaker is to be a tool that can help in developing stan and
-trying out different types of adaptation.
-
 **NOTE:** This is work in progress! Interface not stable or anything.
 
 ## Installation
