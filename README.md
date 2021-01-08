@@ -12,7 +12,7 @@
 devtools::install_github("jtimonen/stanbreaker", ref = "main")
 ```
 
-## Example: code formatting
+## Code formatting
 
 Assume you have `model.stan` with the content
 ``` stan
@@ -47,7 +47,7 @@ target += normal_lpdf(eta[j] | 0, 1);
 
 ```
 
-Then you can call `stanbreaker::format_code(file = "model.stan", use_stanc = FALSE)` which returns
+Then you can call `stanbreaker::format_code(file = "model.stan", use_stanc = FALSE, place_includes = TRUE)` which returns
 
 ``` stan
 data {
@@ -74,11 +74,5 @@ model {
 }
 ```
 
-## Development
+See `?stanbreaker::format_code` for all options.
 
-Before committing
-* run `devtools::document()`
-* run `source("dev/style.R")`, which automatically styles the code
-* run `source("dev/lint.R")`, and manually correct problems shown by it
-* run `devtools::check()` and correct possible problems
-* run `devtools::test()` and see if tests pass
