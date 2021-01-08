@@ -31,7 +31,8 @@ format_code <- function(code = "",
                         verbose = FALSE) {
 
   # Read code
-  if (!is.null(file)) {
+  file_in <- !is.null(file)
+  if (file_in) {
     code <- read_file(file = file)
     include_dir <- dirname(file)
   } else {
@@ -60,11 +61,12 @@ format_code <- function(code = "",
 
   # Overwrite old file or return formatted code as string
   msg("formatting complete!", verbose)
-  if (overwrite_file) {
-    msg("writing to (TODO)", verbose)
-    code <- invisible(code)
+  if (overwrite_file && file_in) {
+    write_file(file, code)
+    invisible(code)
+  } else {
+    code
   }
-  return(code)
 }
 
 format_code_stanc <- function(code, stanc_path, include_dir) {
@@ -87,7 +89,7 @@ format_code_r <- function(code, spaces) {
   return(code)
 }
 
-#' Remove trailing whitespace from each code line
+#' Remove trailing white space from each code line
 #'
 #' @inheritParams format_code
 #' @family code formatting functions
