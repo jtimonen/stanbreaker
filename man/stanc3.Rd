@@ -4,7 +4,13 @@
 \alias{stanc3}
 \title{Call stanc3 using processx}
 \usage{
-stanc3(code = "", stanc_path = NULL, args = c("--help"), print_stdout = TRUE)
+stanc3(
+  code = "",
+  stanc_path = NULL,
+  args = c("--help"),
+  print_stdout = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{code}{Stan code as a character vector}
@@ -18,6 +24,8 @@ CmdStan path set by \code{cmdstanr}.}
 returned.}
 
 \item{print_stdout}{Should the output of \code{stanc} be printed?}
+
+\item{verbose}{Should some informational messages be printed?}
 }
 \value{
 The output of \code{processx::run} for the \code{stanc} command.

@@ -29,7 +29,9 @@ Imports:
     cmdstanr (>= 0.1.3),
     dplyr (>= 1.0.0),
     ggplot2 (>= 3.3),
-    posterior(>= 0.1.2),
+    knitr (>= 1.28),
+    posterior (>= 0.1.2),
+    processx (>= 3.4.5),
     rstan (>= 2.21.2),
     stringr (>= 1.4.0)
 

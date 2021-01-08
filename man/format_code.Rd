@@ -6,18 +6,20 @@
 \usage{
 format_code(
   code = "",
+  file = NULL,
   use_stanc = TRUE,
   overwrite_file = FALSE,
   place_includes = FALSE,
-  include_dir = getwd(),
   stanc_path = NULL,
   spaces = 2,
   verbose = FALSE
 )
 }
 \arguments{
-\item{code}{Stan code to be formatted, or name of a file where the
-code is.}
+\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
+
+\item{file}{File that contains the Stan code to be formatted. If this is
+NULL, \code{code} is used as input.}
 
 \item{use_stanc}{Should the code be formatted using \code{stanc3} with the
 \code{--auto-format} option? If this is
@@ -33,9 +35,7 @@ trims lines and indents based on parentheses and curly brackets).
 by the formatted code?}
 
 \item{place_includes}{Should \code{#include} statements be replaced by their
-respective content?}
-
-\item{include_dir}{Parent directory for possible \code{#include}d files.}
+respective content? (has no effect if \code{use_stanc} is TRUE).}
 
 \item{stanc_path}{Path to the parent directory of \code{stanc}.
 If this is \code{NULL}, an attempt is made to find \code{stanc} from the

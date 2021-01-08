@@ -7,8 +7,7 @@
 place_includes(code, include_dir = getwd(), spaces = 2, verbose = FALSE)
 }
 \arguments{
-\item{code}{Stan code to be formatted, or name of a file where the
-code is.}
+\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
 
 \item{include_dir}{Parent directory for possible \code{#include}d files.}
 

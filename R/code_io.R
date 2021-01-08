@@ -1,12 +1,11 @@
 #' Read a text file and return its contents as a string
 #'
 #' @param file file name
-#' @param ... additional arguments to \code{readLines}
 #' @return file contents as a string
 #' @family IO functions
-read_file <- function(file, ...) {
+read_file <- function(file) {
   checkmate::assert_string(file)
-  lines <- readLines(con = file, ...)
+  lines <- readLines(con = file)
   txt <- paste(lines, collapse = "\n")
   txt <- paste0(txt, "\n")
   return(txt)

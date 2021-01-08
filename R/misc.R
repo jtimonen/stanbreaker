@@ -1,4 +1,3 @@
-
 #' Print a message if verbose mode is on
 #'
 #' @param text The message to be printed. Will be appended with a line break.
@@ -10,4 +9,11 @@ msg <- function(text, verbose, ...) {
     text <- paste0(text, "\n")
     cat(text, ...)
   }
+}
+
+#' Check if OS is Windows
+#'
+#' @return a Boolean value
+using_windows <- function() {
+  isTRUE(.Platform$OS.type == "windows")
 }

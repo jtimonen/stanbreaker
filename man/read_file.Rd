@@ -4,12 +4,10 @@
 \alias{read_file}
 \title{Read a text file and return its contents as a string}
 \usage{
-read_file(file, ...)
+read_file(file)
 }
 \arguments{
 \item{file}{file name}
-
-\item{...}{additional arguments to \code{readLines}}
 }
 \value{
 file contents as a string

@@ -10,7 +10,7 @@ parameters {
 }
 transformed parameters {
   vector[n] theta;
-  theta = mu + tau * eta; // find theta from mu, tau, and eta
+  theta = mu + tau * eta;
 }
 model {
   target += normal_lpdf(eta | 0, 1);

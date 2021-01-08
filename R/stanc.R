@@ -10,10 +10,12 @@
 #' \code{args = c("--help")}, the help page with all possible options is
 #' returned.
 #' @param print_stdout Should the output of \code{stanc} be printed?
+#' @inheritParams format_code
 #' @return The output of \code{processx::run} for the \code{stanc} command.
 #' The output value is returned invisibly.
-stanc3 <- function(code = "", stanc_path = NULL, args = c("--help"),
-                   print_stdout = TRUE) {
+stanc3 <- function(code = "", stanc_path = NULL,
+                   args = c("--help"),
+                   print_stdout = TRUE, verbose = FALSE) {
 
   # Create a temporary file
   stan_file <- cmdstanr::write_stan_file(code)
@@ -23,11 +25,11 @@ stanc3 <- function(code = "", stanc_path = NULL, args = c("--help"),
     stanc_path <- cmdstanr::cmdstan_path()
     stanc_path <- file.path(stanc_path, "bin")
   }
-  if (isTRUE(.Platform$OS.type == "windows")) {
-    cmd <- file.path(stanc_path, "stanc.exe")
-  } else {
-    cmd <- file.path(stanc_path, "stanc")
+  cmd <- file.path(stanc_path, "stanc")
+  if (using_windows()) {
+    cmd <- paste0(cmd, ".exe")
   }
+  msg(paste0("path to stanc binary: ", cmd), verbose)
 
   # Call stanc with given command line arguments
   args <- c(stan_file, args)

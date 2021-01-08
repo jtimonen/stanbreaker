@@ -1,8 +1,9 @@
 #' Format Stan code
 #'
 #' @export
-#' @param code Stan code to be formatted, or name of a file where the
-#' code is.
+#' @param code Stan code to be formatted. Ignored if \code{file} is not NULL.
+#' @param file File that contains the Stan code to be formatted. If this is
+#' NULL, \code{code} is used as input.
 #' @param use_stanc Should the code be formatted using \code{stanc3} with the
 #' \code{--auto-format} option? If this is
 #' \itemize{
@@ -15,39 +16,43 @@
 #' @param overwrite_file Should the file that was given as input be overwritten
 #' by the formatted code?
 #' @param place_includes Should \code{#include} statements be replaced by their
-#' respective content?
-#' @param include_dir Parent directory for possible \code{#include}d files.
+#' respective content? (has no effect if \code{use_stanc} is TRUE).
 #' @param spaces Number of spaces to use for indenting (has no effect if
 #' \code{use_stanc} is TRUE).
 #' @param verbose Should some informational messages be printed?
 #' @inheritParams stanc3
 format_code <- function(code = "",
+                        file = NULL,
                         use_stanc = TRUE,
                         overwrite_file = FALSE,
                         place_includes = FALSE,
-                        include_dir = getwd(),
                         stanc_path = NULL,
                         spaces = 2,
                         verbose = FALSE) {
 
   # Read code
-  if (file.exists(code)) {
-    msg("interpreting code as a filename", verbose)
-    code <- read_file(file = code)
+  if (!is.null(file)) {
+    code <- read_file(file = file)
+    include_dir <- dirname(file)
   } else {
-    msg("interpreting code as a string, not filename", verbose)
+    include_dir <- getwd()
   }
 
   # Place possible includes
   if (place_includes) {
     msg("looking for #include statements", verbose)
-    code <- place_includes(code, spaces = spaces, verbose = verbose)
+    code <- place_includes(
+      code = code,
+      include_dir = include_dir,
+      spaces = spaces,
+      verbose = verbose
+    )
   }
 
   # Format using stanc or R string handling
   if (use_stanc) {
     msg("formatting using stanc3", verbose)
-    code <- format_code_stanc(code)
+    code <- format_code_stanc(code, stanc_path, include_dir)
   } else {
     msg("formatting without stanc3", verbose)
     code <- format_code_r(code, spaces)
@@ -62,8 +67,8 @@ format_code <- function(code = "",
   return(code)
 }
 
-format_code_stanc <- function(code, stanc_path = NULL) {
-  args <- c("--auto-format")
+format_code_stanc <- function(code, stanc_path, include_dir) {
+  args <- c("--auto-format", paste0("--include-paths=", include_dir))
   out <- stanc3(
     code = code,
     stanc_path = stanc_path,
@@ -116,6 +121,7 @@ indent_code <- function(code, spaces, curly = TRUE) {
 #' Place possible #includes into Stan code
 #'
 #' @inheritParams format_code
+#' @param include_dir Parent directory for possible \code{#include}d files.
 #' @return the full program code as a string, not formatted or indented
 #' @family code formatting functions
 place_includes <- function(code, include_dir = getwd(),
@@ -147,9 +153,11 @@ place_includes_lines <- function(lines, parent_dir, verbose) {
       fn <- substr(line, 9, nchar(line))
       fn <- trimws(fn)
       fn <- file.path(parent_dir, fn)
+      fn <- normalizePath(fn)
+      msg(paste0("found included ", fn), verbose = verbose)
 
       # Get the path to includes
-      to_add <- read_file(fn, verbose)
+      to_add <- read_file(fn)
       to_add <- place_includes_lines(to_add, parent_dir, verbose)
     } else {
       to_add <- lines[j]
