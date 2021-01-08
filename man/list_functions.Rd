@@ -7,7 +7,7 @@
 list_functions(code, ...)
 }
 \arguments{
-\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
+\item{code}{Stan code as a string. Ignored if \code{file} is not NULL.}
 
 \item{...}{additional arguments to \code{\link{full_stan_code}}}
 }

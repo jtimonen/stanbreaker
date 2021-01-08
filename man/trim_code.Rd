@@ -7,7 +7,7 @@
 trim_code(code)
 }
 \arguments{
-\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
+\item{code}{Stan code as a string. Ignored if \code{file} is not NULL.}
 }
 \value{
 trimmed code

@@ -7,7 +7,7 @@
 indent_code(code, spaces, curly = TRUE)
 }
 \arguments{
-\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
+\item{code}{Stan code as a string. Ignored if \code{file} is not NULL.}
 
 \item{spaces}{Number of spaces to use for indenting (has no effect if
 \code{use_stanc} is TRUE).}

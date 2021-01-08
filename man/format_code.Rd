@@ -16,9 +16,9 @@ format_code(
 )
 }
 \arguments{
-\item{code}{Stan code to be formatted. Ignored if \code{file} is not NULL.}
+\item{code}{Stan code as a string. Ignored if \code{file} is not NULL.}
 
-\item{file}{File that contains the Stan code to be formatted. If this is
+\item{file}{File that contains Stan code. If this is
 NULL, \code{code} is used as input.}
 
 \item{use_stanc}{Should the code be formatted using \code{stanc3} with the
