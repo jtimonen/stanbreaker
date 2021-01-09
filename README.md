@@ -78,3 +78,15 @@ model {
 
 If you set `place_includes = FALSE`, the `#include` directive wont be replaced with the content of `loop.stan`. You can control the amount of indenting by setting for example `spaces = 4`. By default, code is formatted by handling strings in R. More sophisticated formatting backend (`stanc3` with the `--auto-format` option) is called if you set `use_stanc = TRUE`, but this currently removes all comments from the code. See `?stanbreaker::format_code` for all options.
 
+## Code analysis
+
+You can list the output variables of your Stan model using the functions `parameters()`, `transformed_parameters()` and `generated_quantities()`. For example, for the
+above `model.stan` we can call `stanbreaker::parameters(file = "model.stan")`, which returns the data frame
+
+``` stan
+   Name      Type
+1    mu      real
+2   tau      real
+3   eta vector[n]
+4 theta vector[n]
+```
