@@ -7,11 +7,10 @@
 #' @param use_stanc Should the code be formatted using \code{stanc3} with the
 #' \code{--auto-format} option? If this is
 #' \itemize{
-#'   \item TRUE - \code{stanc} must be installed. *Currently, this option
+#'   \item TRUE - \code{stanc} must be installed. *NOTE: Currently this option
 #'   discards all comments from the code*.
 #'   \item FALSE - code is formatted by handling strings in R. This option will
-#' not discard comments but is otherwise less sophisticated (currently only
-#' trims lines and indents based on parentheses and curly brackets).
+#' not discard comments but is otherwise less sophisticated.
 #' }
 #' @param overwrite_file Should the file that was given as input be overwritten
 #' by the formatted code?
@@ -85,6 +84,8 @@ format_code_r <- function(code, spaces) {
   code <- indent_code(code, spaces = spaces, curly = TRUE)
   code <- indent_code(code, spaces = spaces, curly = FALSE)
   code <- trim_code(code)
+  code <- remove_empty_lines(code)
+  code <- flush_includes_left(code)
   code <- ensure_trailing_linebreak(code)
   return(code)
 }
@@ -147,11 +148,11 @@ place_includes_lines <- function(lines, parent_dir, verbose) {
   for (j in seq_len(L)) {
     # Check if this line begins with #include
     line <- lines[j]
-    line <- trimws(line)
-    start <- substr(line, 1, 8)
-    if (start == "#include") {
+    has_include <- starts_with_include(line)
+    if (has_include) {
 
       # Get name of file to be included
+      line <- trimws(line)
       fn <- substr(line, 9, nchar(line))
       fn <- trimws(fn)
       fn <- file.path(parent_dir, fn)
@@ -272,5 +273,37 @@ ensure_trailing_linebreak <- function(txt) {
   if (substr(txt, L, L) != "\n") {
     txt <- paste0(txt, "\n")
   }
+  return(txt)
+}
+
+#' @describeIn string_utils Remove all empty lines
+remove_empty_lines <- function(txt) {
+  lines <- strsplit(txt, split = "\n")[[1]]
+  lens <- as.numeric(sapply(lines, nchar))
+  inds <- which(lens > 0)
+  lines <- lines[inds]
+  txt <- paste(lines, collapse = "\n")
+  return(txt)
+}
+
+#' @describeIn string_utils Check if first eight non-whitespace characters
+#' are \code{#include}
+starts_with_include <- function(txt) {
+  txt <- trimws(txt)
+  start <- substr(txt, 1, 8)
+  out <- (start == "#include")
+  return(out)
+}
+
+#' @describeIn string_utils Justify all \code{#include} directives all the way
+#' to the left
+flush_includes_left <- function(txt) {
+  flusher <- function(line) {
+    if (starts_with_include(line)) {
+      line <- trimws(line, which = "left")
+    }
+    return(line)
+  }
+  txt <- apply_lines(txt, flusher)
   return(txt)
 }

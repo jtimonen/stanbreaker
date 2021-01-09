@@ -4,11 +4,20 @@
 \alias{string_utils}
 \alias{apply_lines}
 \alias{ensure_trailing_linebreak}
+\alias{remove_empty_lines}
+\alias{starts_with_include}
+\alias{flush_includes_left}
 \title{Common string utilities}
 \usage{
 apply_lines(txt, fun)
 
 ensure_trailing_linebreak(txt)
+
+remove_empty_lines(txt)
+
+starts_with_include(txt)
+
+flush_includes_left(txt)
 }
 \arguments{
 \item{txt}{a character vector}
@@ -27,5 +36,13 @@ Common string utilities
 \item \code{apply_lines}: Apply a function to each line of text
 
 \item \code{ensure_trailing_linebreak}: Ensure that a character vector ends in a line break
+
+\item \code{remove_empty_lines}: Remove all empty lines
+
+\item \code{starts_with_include}: Check if first eight non-whitespace characters
+are \code{#include}
+
+\item \code{flush_includes_left}: Justify all \code{#include} directives all the way
+to the left
 }}
 

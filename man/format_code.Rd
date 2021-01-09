@@ -24,11 +24,10 @@ NULL, \code{code} is used as input.}
 \item{use_stanc}{Should the code be formatted using \code{stanc3} with the
 \code{--auto-format} option? If this is
 \itemize{
-\item TRUE - \code{stanc} must be installed. \emph{Currently, this option
+\item TRUE - \code{stanc} must be installed. \emph{NOTE: Currently this option
 discards all comments from the code}.
 \item FALSE - code is formatted by handling strings in R. This option will
-not discard comments but is otherwise less sophisticated (currently only
-trims lines and indents based on parentheses and curly brackets).
+not discard comments but is otherwise less sophisticated.
 }}
 
 \item{overwrite_file}{Should the file that was given as input be overwritten

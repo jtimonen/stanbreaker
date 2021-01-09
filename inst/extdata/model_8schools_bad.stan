@@ -10,6 +10,7 @@ real<lower=0> tau; // the inverse variance of the effect
 vector[n] eta; // standardized school-level effects
     }
 
+
 transformed parameters {
   vector[n] theta;
            theta = mu + tau * eta;
