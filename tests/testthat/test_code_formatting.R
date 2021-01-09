@@ -11,9 +11,9 @@ code1 <- read_file(file = fn1)
 code2 <- read_file(file = fn2)
 
 
-test_that("code can be formatted from file or text", {
-  a <- format_code(file = fn1)
-  b <- format_code(code = code1)
+test_that("code can be formatted from file or text with stanc", {
+  a <- format_code(file = fn1, use_stanc = TRUE)
+  b <- format_code(code = code1, use_stanc = TRUE)
   expect_equal(a, b)
 })
 

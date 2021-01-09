@@ -7,7 +7,7 @@
 format_code(
   code = "",
   file = NULL,
-  use_stanc = TRUE,
+  use_stanc = FALSE,
   overwrite_file = FALSE,
   place_includes = FALSE,
   stanc_path = NULL,
@@ -24,10 +24,9 @@ NULL, \code{code} is used as input.}
 \item{use_stanc}{Should the code be formatted using \code{stanc3} with the
 \code{--auto-format} option? If this is
 \itemize{
-\item TRUE - \code{stanc} must be installed. \emph{NOTE: Currently this option
-discards all comments from the code}.
-\item FALSE - code is formatted by handling strings in R. This option will
-not discard comments but is otherwise less sophisticated.
+\item FALSE - code is formatted by handling strings in R.
+\item TRUE - \code{stanc} must be installed. \emph{NOTE: Currently choosing
+this option will remove all comments from the code}.
 }}
 
 \item{overwrite_file}{Should the file that was given as input be overwritten
