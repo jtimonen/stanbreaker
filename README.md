@@ -88,5 +88,4 @@ above `model.stan` we can call `stanbreaker::parameters(file = "model.stan")`, w
 1    mu      real
 2   tau      real
 3   eta vector[n]
-4 theta vector[n]
 ```
