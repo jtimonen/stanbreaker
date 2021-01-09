@@ -4,12 +4,14 @@
 \alias{find_block}
 \title{Find a block from Stan code}
 \usage{
-find_block(code, block)
+find_block(code, block, check_valid = TRUE)
 }
 \arguments{
 \item{code}{Stan code as a string}
 
 \item{block}{name of block}
+
+\item{check_valid}{Should the validity of the \code{block} name be checked?}
 }
 \value{
 a named list with three parts

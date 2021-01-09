@@ -40,17 +40,19 @@ get_block <- function(code, block) {
 #'
 #' @param code Stan code as a string
 #' @param block name of block
+#' @param check_valid Should the validity of the \code{block} name be checked?
 #' @return a named list with three parts
-find_block <- function(code, block) {
-  ok_names <- c(
-    "data", "transformed data", "parameters",
-    "transformed parameters", "model", "generated quantities"
-  )
-  if (!(block %in% ok_names)) {
-    stop("invalid block name! found = ", block)
-  }
+find_block <- function(code, block, check_valid = TRUE) {
   pattern <- paste0(block, ".*[{]")
   idx_op <- stringr::str_locate(code, pattern)[1, 2]
+  ok_names <- c(
+    "data", "transformed data", "parameters",
+    "transformed parameters", "model", "generated quantities",
+    "input_vars", "output_vars"
+  )
+  if (check_valid) {
+    assert_one_of(block, ok_names)
+  }
   if (is.na(idx_op)) {
     msg <- paste0("<", block, "> block not found!")
     stop(msg)
