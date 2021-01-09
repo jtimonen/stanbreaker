@@ -5,7 +5,7 @@ context("Code analysis")
 # Read example code
 fn1 <- system.file("extdata", "model_8schools.stan", package = "stanbreaker")
 fn2 <- system.file("extdata", "model_8schools_bad.stan",
-                   package = "stanbreaker"
+  package = "stanbreaker"
 )
 code1 <- read_file(file = fn1)
 code2 <- read_file(file = fn2)
@@ -15,7 +15,7 @@ test_that("parameters can be listed", {
   a <- parameters(code = code1)
   b <- parameters(file = fn2)
   expect_equal(a, b)
-  expect_equal(dim(a), c(4, 2))
+  expect_equal(dim(a), c(3, 2))
 })
 
 test_that("transformed parameters can be listed", {

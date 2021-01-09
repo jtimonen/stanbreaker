@@ -11,7 +11,7 @@ NULL
 #' @describeIn list_output Lists all parameters.
 parameters <- function(code = "", file = NULL, verbose = FALSE) {
   ov <- mir_block("output_vars", code, file, verbose)
-  split_mir(ov, "parameters")
+  split_mir(ov, "\\sparameters")
 }
 
 #' @export
