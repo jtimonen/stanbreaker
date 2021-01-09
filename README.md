@@ -16,6 +16,7 @@ devtools::install_github("jtimonen/stanbreaker", ref = "main")
 
 Assume you have `model.stan` with the content
 ``` stan
+
 data {
 int<lower=0> n; //number of schools
      real y[n]; // effect of coaching
@@ -26,6 +27,8 @@ real<lower=0> sigma[n]; // standard errors of effects
 real<lower=0> tau; // the inverse variance of the effect
 vector[n] eta; // standardized school-level effects
     }
+
+
 transformed parameters {
   vector[n] theta;
            theta = mu + tau * eta;
@@ -47,7 +50,7 @@ target += normal_lpdf(eta[j] | 0, 1);
 
 ```
 
-Then you can call `stanbreaker::format_code(file = "model.stan", use_stanc = FALSE, place_includes = TRUE)` which returns
+Then you can call `stanbreaker::format_code(file = "model.stan", place_includes = TRUE)` which returns
 
 ``` stan
 data {
@@ -69,10 +72,9 @@ model {
   for(j in 1:n) {
     target += normal_lpdf(eta[j] | 0, 1);
   }
-
   target += normal_lpdf(y | theta, sigma);
 }
 ```
 
-See `?stanbreaker::format_code` for all options.
+If you set `place_includes = FALSE`, the `#include` directive wont be replaced with the content of `loop.stan`. You can control the amount of indenting by setting for example `spaces = 4`. By default, code is formatted by handling strings in R. More sophisticated formatting backend (`stanc3` with the `--auto-format` option) is called if you set `use_stanc = TRUE`, but this currently removes all comments from the code. See `?stanbreaker::format_code` for all options.
 
