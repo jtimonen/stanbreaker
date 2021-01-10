@@ -11,7 +11,7 @@ NULL
 #' @describeIn list_output Lists all parameters.
 parameters <- function(code = "", file = NULL, verbose = FALSE) {
   ov <- mir_block("output_vars", code, file, verbose)
-  split_mir(ov, "\\sparameters")
+  split_mir(ov, "[^_]parameters")
 }
 
 #' @export
@@ -29,22 +29,23 @@ generated_quantities <- function(code = "", file = NULL, verbose = FALSE) {
 }
 
 split_mir <- function(mir, opening, closing = "[//]") {
-  df <- matrix(nrow = 0, ncol = 3)
+  df <- matrix(nrow = 0, ncol = 2)
   mir <- indent_code(mir, spaces = 0)
   rem <- gsub("\n", " ", mir)
   i1 <- 0
   while (!is.na(i1)) {
-    i1 <- stringr::str_locate(rem, pattern = opening)[1]
+    i1 <- stringr::str_locate(rem, pattern = opening)[2]
     i2 <- stringr::str_locate(rem, pattern = closing)[1]
-    line <- substr(rem, i1, i2 - 3)
+    line <- substr(rem, i1 + 1, i2 - 3)
     if (!is.na(line)) {
       if (nchar(line) > 0) {
         parts <- strsplit(line, split = " ")[[1]]
         P <- length(parts)
-        categ <- parts[1]
-        type <- paste(parts[2:(P - 1)], collapse = " ")
+        type <- paste(parts[1:(P - 1)], collapse = " ")
+        type <- trimws(type)
         name <- parts[P]
-        r <- c(categ, name, type)
+        name <- trimws(name)
+        r <- c(name, type)
         df <- rbind(df, r)
       }
     }
@@ -53,9 +54,9 @@ split_mir <- function(mir, opening, closing = "[//]") {
 
   # Return
   df <- data.frame(df)
-  colnames(df) <- c("Group", "Name", "Type")
+  colnames(df) <- c("Name", "Type")
   rownames(df) <- NULL
-  return(df[, 2:3])
+  return(df)
 }
 
 #' List all output or input variables of a Stan model

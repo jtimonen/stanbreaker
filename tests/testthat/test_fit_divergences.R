@@ -89,11 +89,13 @@ test_that("rstan_power_method computes an eigenvalue and an eigenvector", {
 })
 
 # Destroy the executables that were created
-fn1 <- system.file("extdata", "model_8schools", package = "stanbreaker")
-fn2 <- system.file("extdata", "lr", package = "stanbreaker")
+fn1 <- "model_8schools"
+fn2 <- "lr"
 if (using_windows()) {
   fn1 <- paste0(fn1, ".exe")
   fn2 <- paste0(fn2, ".exe")
 }
+fn1 <- system.file("extdata", fn1, package = "stanbreaker")
+fn2 <- system.file("extdata", fn2, package = "stanbreaker")
 file.remove(fn1)
 file.remove(fn2)
