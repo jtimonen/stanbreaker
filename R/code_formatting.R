@@ -12,7 +12,8 @@
 #'   this option will remove all comments from the code*.
 #' }
 #' @param overwrite_file Should the file that was given as input be overwritten
-#' by the formatted code?
+#' by the formatted code? It is not recommended to set this to \code{TRUE}
+#' unless your code is backed up somewhere.
 #' @param place_includes Should \code{#include} statements be replaced by their
 #' respective content? (has no effect if \code{use_stanc} is TRUE).
 #' @param spaces Number of spaces to use for indenting (has no effect if
